@@ -1,0 +1,11 @@
+{
+  "provider": "deepseek",
+  "audio_provider": "deepseek",
+  "model": "deepseek-flash",
+  "port": 4312,
+  "status": "PASS",
+  "intent": "ADD_SKILL",
+  "skill_id": "home-gardening",
+  "response_id": "366672ec-e8fd-40aa-9bd4-6cbb50490f24",
+  "duration_seconds": 17.33
+}

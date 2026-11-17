@@ -1,0 +1,22 @@
+{$PUBLIC_HOST} {
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy strict-origin-when-cross-origin
+        Permissions-Policy "camera=(), geolocation=(), microphone=(self)"
+        Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; media-src 'self' blob:; frame-ancestors 'none'"
+    }
+    request_body {
+        max_size 7MB
+    }
+    handle /api/* {
+        reverse_proxy api:8000
+    }
+    handle /health/* {
+        reverse_proxy api:8000
+    }
+    handle {
+        root * /srv
+        try_files {path} /index.html
+        file_server
+    }
+}

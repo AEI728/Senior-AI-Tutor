@@ -1,0 +1,44 @@
+name: Offline acceptance
+on: [push, pull_request]
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16.6
+        env:
+          POSTGRES_DB: xiaoban_test
+          POSTGRES_USER: xiaoban
+          POSTGRES_PASSWORD: ci_test_only
+        ports: ["5432:5432"]
+        options: --health-cmd="pg_isready -U xiaoban -d xiaoban_test" --health-interval=3s --health-timeout=3s --health-retries=20
+    env:
+      APP_ENV: test
+      DATABASE_URL: postgresql+psycopg://xiaoban:ci_test_only@localhost:5432/xiaoban_test
+      TEST_DATABASE_URL: postgresql+psycopg://xiaoban:ci_test_only@localhost:5432/xiaoban_test
+      LLM_PROVIDER: mock
+      AUDIO_PROVIDER: mock
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan committed source for credentials and private runtime files
+        run: python3 scripts/check_public_source.py --staged
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.13.7'
+          python-version: '3.12'
+      - run: npm install -g pnpm@11.25.0
+      - run: make init
+      - run: make migrate seed lint typecheck test build eval-mock
+      - run: cd apps/web && pnpm exec playwright install --with-deps chromium
+      - run: make e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: acceptance-evidence
+          path: |
+            docs/evals
+            apps/web/test-results
+            apps/web/playwright-report

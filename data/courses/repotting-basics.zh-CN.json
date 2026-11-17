@@ -1,0 +1,81 @@
+{
+  "skill": {
+    "id": "home-gardening",
+    "name": "家庭园艺",
+    "category": "gardening"
+  },
+  "course": {
+    "id": "repotting-basics",
+    "title": "盆栽换盆基础（内部测试）",
+    "version": 1,
+    "review_status": "draft",
+    "asset_license_status": "internal_demo",
+    "locale": "zh-CN",
+    "media_path": null,
+    "learning_goal": "了解换盆准备与顺序；不替代具体植物的专业养护判断",
+    "prerequisites": [
+      "确认植物种类及是否适合换盆",
+      "准备清洁的操作台和容器"
+    ],
+    "steps": [
+      {
+        "no": 1,
+        "title": "准备材料",
+        "instruction": "先把新花盆、适合植物的介质和常用工具放稳。",
+        "explanation": "准备好材料，操作时更容易专心。",
+        "safety_notes": [
+          "不要直接接触来源不明的药剂"
+        ],
+        "completion_rule": "用户自述材料准备完毕",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 2,
+        "title": "核对植物情况",
+        "instruction": "先确认植物种类，并检查是否适合现在换盆。",
+        "explanation": "不同植物对换盆时机和处理方法的要求不同。",
+        "safety_notes": [
+          "信息不足时不要擅自处理根系"
+        ],
+        "completion_rule": "用户自述已确认植物情况",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 3,
+        "title": "处理旧盆",
+        "instruction": "按课程示范，轻拿植物并避免拉扯茎叶。",
+        "explanation": "动作慢一些有助于避免不必要损伤。",
+        "safety_notes": [
+          "若盆体过重或需用锋利工具，暂停并寻求帮助"
+        ],
+        "completion_rule": "用户自述已移出旧盆",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 4,
+        "title": "放入新盆",
+        "instruction": "按植物需要安放介质，将植物扶稳。",
+        "explanation": "需要结合植物类型决定介质与深度。",
+        "safety_notes": [
+          "不提供无依据的固定介质数量"
+        ],
+        "completion_rule": "用户自述安放完毕",
+        "source_role": "platform_editor"
+      }
+    ],
+    "faq": [
+      {
+        "step_no": 4,
+        "question": "土要放多少？",
+        "answer": "要看植物种类、新盆大小和介质类型。当前课程没有给出统一用量，请先确认这些信息，不要盲目填满。",
+        "verified": false
+      },
+      {
+        "step_no": 3,
+        "question": "拿不出来怎么办？",
+        "answer": "先暂停，不要用力拉扯植物；如果需要用刀具或搬动重物，请找人协助。",
+        "verified": false
+      }
+    ]
+  }
+}

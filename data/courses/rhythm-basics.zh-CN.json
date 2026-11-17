@@ -1,0 +1,69 @@
+{
+  "skill": {
+    "id": "music",
+    "name": "节奏入门",
+    "category": "music"
+  },
+  "course": {
+    "id": "rhythm-basics",
+    "title": "轻拍节奏入门（内部测试）",
+    "version": 1,
+    "review_status": "draft",
+    "asset_license_status": "internal_demo",
+    "locale": "zh-CN",
+    "media_path": null,
+    "learning_goal": "通过原创文字与流程示意了解轻拍节奏入门，不作为专业教学认证。",
+    "prerequisites": [
+      "准备安全、安静且方便休息的环境。"
+    ],
+    "steps": [
+      {
+        "no": 1,
+        "title": "准备",
+        "instruction": "坐稳，放松双手和肩膀。",
+        "explanation": "按舒适速度练习，不追求一次完成。",
+        "safety_notes": [
+          "不要求用力敲击；不适时停止。"
+        ],
+        "completion_rule": "用户明确自述本步骤完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 2,
+        "title": "尝试",
+        "instruction": "用手指在桌面轻拍，保持舒适音量。",
+        "explanation": "按舒适速度练习，不追求一次完成。",
+        "safety_notes": [
+          "不要求用力敲击；不适时停止。"
+        ],
+        "completion_rule": "用户明确自述本步骤完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 3,
+        "title": "回顾",
+        "instruction": "按自己舒适的速度重复短节奏，疲劳时休息。",
+        "explanation": "按舒适速度练习，不追求一次完成。",
+        "safety_notes": [
+          "不要求用力敲击；不适时停止。"
+        ],
+        "completion_rule": "用户明确自述本步骤完成",
+        "source_role": "platform_editor"
+      }
+    ],
+    "faq": [
+      {
+        "step_no": 1,
+        "question": "一定要一次做好吗？",
+        "answer": "不需要，可以暂停、复讲，按自己的节奏尝试。",
+        "verified": false
+      },
+      {
+        "step_no": 2,
+        "question": "不舒服怎么办？",
+        "answer": "停止练习、放稳工具并休息，必要时寻求帮助。",
+        "verified": false
+      }
+    ]
+  }
+}

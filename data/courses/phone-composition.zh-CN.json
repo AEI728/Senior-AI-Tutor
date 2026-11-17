@@ -1,0 +1,69 @@
+{
+  "skill": {
+    "id": "photography",
+    "name": "手机摄影",
+    "category": "photography"
+  },
+  "course": {
+    "id": "phone-composition",
+    "title": "手机构图入门（内部测试）",
+    "version": 1,
+    "review_status": "draft",
+    "asset_license_status": "internal_demo",
+    "locale": "zh-CN",
+    "media_path": null,
+    "learning_goal": "通过原创文字与流程示意了解手机构图入门，不作为专业教学认证。",
+    "prerequisites": [
+      "准备安全、安静且方便休息的环境。"
+    ],
+    "steps": [
+      {
+        "no": 1,
+        "title": "准备",
+        "instruction": "选择一件不含他人隐私的静物。",
+        "explanation": "按舒适速度练习，不追求一次完成。",
+        "safety_notes": [
+          "不要边走边拍，不在道路或危险边缘拍摄。"
+        ],
+        "completion_rule": "用户明确自述本步骤完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 2,
+        "title": "尝试",
+        "instruction": "站稳后打开手机相机，将主体放入画面。",
+        "explanation": "按舒适速度练习，不追求一次完成。",
+        "safety_notes": [
+          "不要边走边拍，不在道路或危险边缘拍摄。"
+        ],
+        "completion_rule": "用户明确自述本步骤完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 3,
+        "title": "回顾",
+        "instruction": "改变主体在画面中的位置，选择喜欢的一张。",
+        "explanation": "按舒适速度练习，不追求一次完成。",
+        "safety_notes": [
+          "不要边走边拍，不在道路或危险边缘拍摄。"
+        ],
+        "completion_rule": "用户明确自述本步骤完成",
+        "source_role": "platform_editor"
+      }
+    ],
+    "faq": [
+      {
+        "step_no": 1,
+        "question": "一定要一次做好吗？",
+        "answer": "不需要，可以暂停、复讲，按自己的节奏尝试。",
+        "verified": false
+      },
+      {
+        "step_no": 2,
+        "question": "不舒服怎么办？",
+        "answer": "停止练习、放稳工具并休息，必要时寻求帮助。",
+        "verified": false
+      }
+    ]
+  }
+}

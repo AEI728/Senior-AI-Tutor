@@ -1,0 +1,10 @@
+{"id":"H01","input":"想学盆栽","expected":{"intent":"ADD_SKILL"}}
+{"id":"H02","input":"浏览一下园艺课程","expected":{"intent":"DISCOVER_SKILL"}}
+{"id":"H03","input":"把养花加入，再打开第一节课","expected":{"intent":"ADD_SKILL_AND_OPEN_LESSON"}}
+{"id":"H04","input":"我想学摄影","expected":{"intent":"ADD_SKILL"}}
+{"id":"H05","input":"把这个加入","context":{"focused_skill_id":"home-gardening"},"expected":{"intent":"ADD_SKILL"}}
+{"id":"H06","input":"把这个加入","expected":{"intent":"UNKNOWN"}}
+{"id":"H07","input":"打开园艺课程","expected":{"intent":"OPEN_LESSON"}}
+{"id":"H08","input":"继续上次的课程","expected":{"intent":"CONTINUE_LESSON"}}
+{"id":"H09","input":"我要语音陪练","expected":{"intent":"START_PRACTICE"}}
+{"id":"H10","input":"撤销刚才的加入","expected":{"intent":"CANCEL_ACTION"}}

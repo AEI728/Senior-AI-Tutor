@@ -1,0 +1,110 @@
+{"time_utc": "2026-11-11T09:21:27.657001+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "ruff", "check", "app", "tests"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:21:30.278288+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "lint"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:21:39.237102+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "mypy", "app"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:21:46.808086+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "typecheck"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:21:57.138413+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/unit", "-q"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:22:13.421416+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/integration", "-q"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:22:41.062521+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "e2e"], "exit_code": 1}
+{"time_utc": "2026-11-11T09:22:30.218691+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "test", "--run"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:24:02.429695+00:00", "cwd": "${PROJECT_ROOT}", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "${PROJECT_ROOT}\\evals\\run.py", "--provider", "mock"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:27:11.868197+00:00", "cwd": "${PROJECT_ROOT}", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "${PROJECT_ROOT}\\scripts\\export_contract.py", "--check"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:27:23.184646+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "exec", "openapi-typescript", "../../docs/api/openapi.snapshot.json", "--check", "-o", "src/generated/api.d.ts"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:27:40.950487+00:00", "cwd": "${PROJECT_ROOT}", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "${PROJECT_ROOT}\\scripts\\smoke.py", "--live"], "exit_code": 1}
+{"time_utc": "2026-11-11T09:28:41.328630+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-c", "from app.main import app; assert app.title"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:30:35.114727+00:00", "cwd": "${PROJECT_ROOT}", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "${PROJECT_ROOT}\\scripts\\smoke.py"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:30:46.199279+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "ruff", "check", "app", "tests"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:28:57.814055+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "build"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:31:22.766171+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "lint"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:31:44.179707+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "mypy", "app"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:31:52.251258+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "typecheck"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:25:41.592231+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "e2e"], "exit_code": 1}
+{"time_utc": "2026-11-11T09:32:07.759001+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/unit", "-q"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:32:24.509226+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/integration", "-q"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:34:07.236646+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["uv", "sync", "--frozen"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:34:11.029268+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "install", "--frozen-lockfile"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:34:25.851146+00:00", "cwd": "${PROJECT_ROOT}", "command": ["docker", "compose", "up", "-d", "--wait", "db"], "exit_code": 2}
+{"time_utc": "2026-11-11T09:33:18.104308+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "e2e"], "exit_code": 1}
+{"time_utc": "2026-11-11T09:37:27.728078+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/integration", "-q"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:37:46.069490+00:00", "cwd": "${PROJECT_ROOT}", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "${PROJECT_ROOT}\\scripts\\export_contract.py", "--check"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:37:57.284614+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "exec", "openapi-typescript", "../../docs/api/openapi.snapshot.json", "--check", "-o", "src/generated/api.d.ts"], "exit_code": 1}
+{"time_utc": "2026-11-11T09:35:56.053983+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "e2e"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:39:39.971549+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "ruff", "check", "app", "tests"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:40:07.211790+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "lint"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:40:17.884743+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "mypy", "app"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:40:31.799430+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "typecheck"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:40:48.415951+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "alembic", "upgrade", "head"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:40:43.239468+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-c", "from app.main import app; assert app.title"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:40:52.881964+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "app.seed"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:40:54.478037+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "build"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:42:01.524134+00:00", "cwd": "${PROJECT_ROOT}", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "${PROJECT_ROOT}\\scripts\\smoke.py"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:42:01.975511+00:00", "cwd": "${PROJECT_ROOT}", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "${PROJECT_ROOT}\\scripts\\export_contract.py", "--check"], "exit_code": 0}
+{"time_utc": "2026-11-11T09:42:13.256324+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "exec", "openapi-typescript", "../../docs/api/openapi.snapshot.json", "--check", "-o", "src/generated/api.d.ts"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:29:22.531052+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "ruff", "check", "app", "tests"], "exit_code": 1}
+{"time_utc": "2026-11-16T14:29:25.597392+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "mypy", "app"], "exit_code": 1}
+{"time_utc": "2026-11-16T14:29:34.909422+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/unit", "-q"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:29:52.320346+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/integration", "-q"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:30:56.803088+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "alembic", "upgrade", "head"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:30:59.922345+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "ruff", "check", "app", "tests"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:31:01.755698+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "app.seed"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:31:04.019694+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "lint"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:31:14.885662+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "mypy", "app"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:31:23.244290+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "typecheck"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:31:37.361933+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "test", "--run"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:32:57.764949+00:00", "cwd": "${PROJECT_ROOT}", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "${PROJECT_ROOT}\\evals\\run.py", "--provider", "mock"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:30:45.734816+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "e2e"], "exit_code": 1}
+{"time_utc": "2026-11-16T14:35:11.932491+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "ruff", "check", "app", "tests"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:35:13.935451+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "lint"], "exit_code": 1}
+{"time_utc": "2026-11-16T14:35:23.483768+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "mypy", "app"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:35:31.981276+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "typecheck"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:35:43.194810+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/unit", "-q"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:36:01.226538+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/integration", "-q"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:36:10.802069+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "e2e"], "exit_code": 1}
+{"time_utc": "2026-11-16T14:36:54.491809+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "alembic", "upgrade", "head"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:36:59.042210+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "app.seed"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:39:27.814616+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-c", "from app.main import app; assert app.title"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:38:23.430617+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "e2e"], "exit_code": 1}
+{"time_utc": "2026-11-16T14:39:38.688799+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "build"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:41:30.602705+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/integration", "-q"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:41:53.691664+00:00", "cwd": "${PROJECT_ROOT}", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "${PROJECT_ROOT}\\evals\\run.py", "--provider", "live"], "exit_code": 1}
+{"time_utc": "2026-11-16T14:43:52.761554+00:00", "cwd": "${PROJECT_ROOT}", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "${PROJECT_ROOT}\\evals\\run.py", "--provider", "live"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:44:17.997634+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "e2e"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:46:29.323020+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "alembic", "upgrade", "head"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:46:33.516595+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "app.seed"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:48:01.622076+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "ruff", "check", "app", "tests"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:48:03.757955+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "lint"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:48:13.313835+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "mypy", "app"], "exit_code": 1}
+{"time_utc": "2026-11-16T14:48:22.672030+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/unit", "-q"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:48:40.916930+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/integration", "-q"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:49:04.172734+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "test", "--run"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:49:26.872885+00:00", "cwd": "${PROJECT_ROOT}", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "${PROJECT_ROOT}\\scripts\\export_contract.py", "--check"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:49:36.668861+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "exec", "openapi-typescript", "../../docs/api/openapi.snapshot.json", "--check", "-o", "src/generated/api.d.ts"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:50:37.676581+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "alembic", "upgrade", "head"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:50:42.599465+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "app.seed"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:50:52.402014+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "ruff", "check", "app", "tests"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:50:55.049864+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "lint"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:51:05.380927+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "mypy", "app"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:51:12.259729+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "typecheck"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:51:24.352804+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/unit", "-q"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:51:42.734141+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/integration", "-q"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:52:08.051673+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "test", "--run"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:52:30.608300+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-c", "from app.main import app; assert app.title"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:52:40.301264+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "build"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:53:05.149246+00:00", "cwd": "${PROJECT_ROOT}", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "${PROJECT_ROOT}\\scripts\\export_contract.py", "--check"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:53:15.277362+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "exec", "openapi-typescript", "../../docs/api/openapi.snapshot.json", "--check", "-o", "src/generated/api.d.ts"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:55:43.864771+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "ruff", "check", "app", "tests"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:55:45.891807+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "lint"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:55:55.569046+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "mypy", "app"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:56:03.904673+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "typecheck"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:56:15.403731+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/unit", "-q"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:56:34.779237+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/integration", "-q"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:57:00.127508+00:00", "cwd": "${PROJECT_ROOT}", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "${PROJECT_ROOT}\\scripts\\export_contract.py", "--check"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:57:10.280796+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "exec", "openapi-typescript", "../../docs/api/openapi.snapshot.json", "--check", "-o", "src/generated/api.d.ts"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:58:11.786390+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "ruff", "check", "app", "tests"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:58:13.703154+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "lint"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:58:22.750727+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "mypy", "app"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:58:31.277086+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "typecheck"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:58:42.255849+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "pytest", "tests/integration", "-q"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:59:06.697656+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-c", "from app.main import app; assert app.title"], "exit_code": 0}
+{"time_utc": "2026-11-16T14:59:16.519303+00:00", "cwd": "${PROJECT_ROOT}\\apps\\web", "command": ["${PNPM}", "build"], "exit_code": 0}
+{"time_utc": "2026-11-16T15:00:09.836496+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "alembic", "upgrade", "head"], "exit_code": 0}
+{"time_utc": "2026-11-16T15:00:14.177740+00:00", "cwd": "${PROJECT_ROOT}\\apps\\api", "command": ["${PROJECT_ROOT}\\apps\\api\\.venv\\Scripts\\python.exe", "-m", "app.seed"], "exit_code": 0}

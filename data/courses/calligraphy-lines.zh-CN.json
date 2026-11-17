@@ -1,0 +1,69 @@
+{
+  "skill": {
+    "id": "calligraphy",
+    "name": "书法入门",
+    "category": "calligraphy"
+  },
+  "course": {
+    "id": "calligraphy-lines",
+    "title": "纸上横线练习（内部测试）",
+    "version": 1,
+    "review_status": "draft",
+    "asset_license_status": "internal_demo",
+    "locale": "zh-CN",
+    "media_path": null,
+    "learning_goal": "通过原创文字与流程示意了解纸上横线练习，不作为专业教学认证。",
+    "prerequisites": [
+      "准备安全、安静且方便休息的环境。"
+    ],
+    "steps": [
+      {
+        "no": 1,
+        "title": "准备",
+        "instruction": "准备纸和笔，选择舒适坐姿。",
+        "explanation": "按舒适速度练习，不追求一次完成。",
+        "safety_notes": [
+          "手腕不适请停止；不要求使用毛笔。"
+        ],
+        "completion_rule": "用户明确自述本步骤完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 2,
+        "title": "尝试",
+        "instruction": "轻轻画一条横线，不必用力握紧。",
+        "explanation": "按舒适速度练习，不追求一次完成。",
+        "safety_notes": [
+          "手腕不适请停止；不要求使用毛笔。"
+        ],
+        "completion_rule": "用户明确自述本步骤完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 3,
+        "title": "回顾",
+        "instruction": "放松手腕，再画一条横线，观察两次的变化。",
+        "explanation": "按舒适速度练习，不追求一次完成。",
+        "safety_notes": [
+          "手腕不适请停止；不要求使用毛笔。"
+        ],
+        "completion_rule": "用户明确自述本步骤完成",
+        "source_role": "platform_editor"
+      }
+    ],
+    "faq": [
+      {
+        "step_no": 1,
+        "question": "一定要一次做好吗？",
+        "answer": "不需要，可以暂停、复讲，按自己的节奏尝试。",
+        "verified": false
+      },
+      {
+        "step_no": 2,
+        "question": "不舒服怎么办？",
+        "answer": "停止练习、放稳工具并休息，必要时寻求帮助。",
+        "verified": false
+      }
+    ]
+  }
+}

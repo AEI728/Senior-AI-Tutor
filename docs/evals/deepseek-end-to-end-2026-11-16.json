@@ -1,0 +1,13 @@
+{
+  "provider": "deepseek",
+  "model": "deepseek-flash",
+  "started_utc": "2026-11-16T14:37:40.696949+00:00",
+  "fixture_seconds": 1.68,
+  "asr": "PASS",
+  "model_tool_database_replay": "PASS",
+  "owned_reply_tts": "PASS",
+  "browse_no_join": "PASS",
+  "browser_navigation": "NOT_RUN_IN_THIS_SCRIPT",
+  "status": "PASS",
+  "duration_seconds": 11.05
+}

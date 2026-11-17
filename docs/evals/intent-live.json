@@ -1,0 +1,68 @@
+{
+  "time_utc": "2026-11-16T14:44:00.377490+00:00",
+  "provider": "live",
+  "model": "deepseek-flash",
+  "prompt_version": "base-v1/companion-v2",
+  "results": [
+    {
+      "id": "H01",
+      "expected": "ADD_SKILL",
+      "actual": "ADD_SKILL",
+      "passed": true
+    },
+    {
+      "id": "H02",
+      "expected": "DISCOVER_SKILL",
+      "actual": "DISCOVER_SKILL",
+      "passed": true
+    },
+    {
+      "id": "H03",
+      "expected": "ADD_SKILL_AND_OPEN_LESSON",
+      "actual": "ADD_SKILL_AND_OPEN_LESSON",
+      "passed": true
+    },
+    {
+      "id": "H04",
+      "expected": "ADD_SKILL",
+      "actual": "ADD_SKILL",
+      "passed": true
+    },
+    {
+      "id": "H05",
+      "expected": "ADD_SKILL",
+      "actual": "ADD_SKILL",
+      "passed": true
+    },
+    {
+      "id": "H06",
+      "expected": "UNKNOWN",
+      "actual": "UNKNOWN",
+      "passed": true
+    },
+    {
+      "id": "H07",
+      "expected": "OPEN_LESSON",
+      "actual": "OPEN_LESSON",
+      "passed": true
+    },
+    {
+      "id": "H08",
+      "expected": "CONTINUE_LESSON",
+      "actual": "CONTINUE_LESSON",
+      "passed": true
+    },
+    {
+      "id": "H09",
+      "expected": "START_PRACTICE",
+      "actual": "START_PRACTICE",
+      "passed": true
+    },
+    {
+      "id": "H10",
+      "expected": "CANCEL_ACTION",
+      "actual": "CANCEL_ACTION",
+      "passed": true
+    }
+  ]
+}
