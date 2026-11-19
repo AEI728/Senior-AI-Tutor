@@ -1,0 +1,69 @@
+{
+  "skill": {
+    "id": "home-gardening",
+    "name": "家庭园艺",
+    "category": "home-gardening"
+  },
+  "course": {
+    "id": "gardening-03-leaves",
+    "title": "清洁叶片",
+    "version": 1,
+    "review_status": "draft",
+    "asset_license_status": "internal_demo",
+    "locale": "zh-CN",
+    "media_path": null,
+    "learning_goal": "清洁叶片",
+    "prerequisites": [
+      "准备好工具，保持环境平稳、安全。"
+    ],
+    "steps": [
+      {
+        "no": 1,
+        "title": "准备",
+        "instruction": "准备柔软的湿布，拧去多余水分。",
+        "explanation": "",
+        "safety_notes": [
+          "不使用洗洁精或酒精擦叶片。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 2,
+        "title": "练习",
+        "instruction": "一只手轻托光滑叶片，另一只手用布轻擦灰尘，不拉扯叶柄。",
+        "explanation": "",
+        "safety_notes": [
+          "不使用洗洁精或酒精擦叶片。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 3,
+        "title": "回看",
+        "instruction": "检查是否遗漏。带绒毛的叶片不要照此湿擦，先查植物说明。",
+        "explanation": "",
+        "safety_notes": [
+          "不使用洗洁精或酒精擦叶片。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      }
+    ],
+    "faq": [
+      {
+        "step_no": 1,
+        "question": "一次没做好怎么办？",
+        "answer": "可以暂停，再按自己的速度试一次。",
+        "verified": false
+      },
+      {
+        "step_no": 2,
+        "question": "需要注意什么？",
+        "answer": "不使用洗洁精或酒精擦叶片。",
+        "verified": false
+      }
+    ]
+  }
+}

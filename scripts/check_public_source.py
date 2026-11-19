@@ -10,8 +10,10 @@ parser=argparse.ArgumentParser()
 parser.add_argument('--staged',action='store_true')
 args=parser.parse_args()
 root=Path(__file__).resolve().parents[1]
-command=['git','ls-files','-z']
+command=['git','ls-files','-z'] if args.staged else ['git','ls-files','--cached','--others','--exclude-standard','-z']
 paths=[p for p in subprocess.check_output(command,cwd=root).decode().split('\0') if p]
+if not args.staged:
+    paths=list(dict.fromkeys(p for p in paths if (root/p).is_file()))
 staged_blobs={}
 if args.staged and paths:
     entries=subprocess.check_output(['git','ls-files','--stage','-z'],cwd=root).decode().split('\0')
@@ -47,7 +49,7 @@ rules={
 findings=[]
 for name in paths:
     parts=Path(name).parts
-    if (Path(name).name.startswith('.env') and Path(name).name!='.env.example') or any(p in ('backups','uploads','.venv','node_modules','test-results','live-test-results') for p in parts) or name.endswith(('.db','.sqlite','.sqlite3','.pem','.key','.p12','.pfx','.dump','.log')):
+    if (Path(name).name.startswith('.env') and Path(name).name!='.env.example') or any(p in ('backups','uploads','artifacts','.venv','node_modules','test-results','live-test-results') for p in parts) or name.endswith(('.db','.sqlite','.sqlite3','.pem','.key','.p12','.pfx','.dump','.log')):
         findings.append({'file':name,'rule':'private_runtime_file'})
     data=staged_blobs[name] if args.staged else (root/name).read_bytes()
     if any(secret in data for secret in secrets):findings.append({'file':name,'rule':'configured_secret'})

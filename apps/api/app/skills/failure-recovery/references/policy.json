@@ -1,0 +1,6 @@
+{
+  "version": "1.1.0",
+  "manual_after": 2,
+  "max_options": 2,
+  "safe_retries": 1
+}

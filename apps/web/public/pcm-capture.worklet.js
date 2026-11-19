@@ -1,8 +1,8 @@
 // Capture PCM on the audio rendering thread; outputs remain silent.
 class PcmCapture extends AudioWorkletProcessor {
   process(inputs) {
-    const input = inputs[0]?.[0];
-    if (input) this.port.postMessage(new Float32Array(input));
+    const channels = inputs[0];
+    if (channels?.length) this.port.postMessage(channels.map(channel => new Float32Array(channel)));
     return true;
   }
 }

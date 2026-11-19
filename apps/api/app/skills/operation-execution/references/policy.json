@@ -1,0 +1,57 @@
+{
+  "version": "1.1.0",
+  "intent_tools": {
+    "ADD_SKILL": [
+      "library.add"
+    ],
+    "ADD_SKILL_AND_OPEN_LESSON": [
+      "library.add",
+      "OPEN_LESSON"
+    ],
+    "DISCOVER_SKILL": [
+      "OPEN_PAGE"
+    ],
+    "RECOMMEND_COURSE": [
+      "catalog.read"
+    ],
+    "OPEN_LESSON": [
+      "OPEN_LESSON"
+    ],
+    "CONTINUE_LESSON": [
+      "progress.read",
+      "OPEN_LESSON"
+    ],
+    "START_PRACTICE": [
+      "OPEN_PAGE"
+    ],
+    "CANCEL_ACTION": [
+      "library.undo"
+    ],
+    "STOP": [
+      "actions.cancel"
+    ],
+    "UNKNOWN": [],
+    "UNAVAILABLE": [],
+    "CHAT": [
+      "companion.chat"
+    ],
+    "OPEN_HOME": [
+      "OPEN_PAGE"
+    ],
+    "OPEN_SKILLS": [
+      "OPEN_PAGE"
+    ],
+    "OPEN_SETTINGS": [
+      "OPEN_PAGE"
+    ],
+    "OPEN_COMMUNITY": [
+      "OPEN_PAGE"
+    ],
+    "PAUSE_PLAYER": [
+      "PAUSE_PLAYER"
+    ],
+    "RESUME_PLAYER": [
+      "RESUME_PLAYER"
+    ]
+  }
+}

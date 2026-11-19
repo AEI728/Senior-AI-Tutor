@@ -7,6 +7,7 @@ from .config import settings
 from .schemas import Plan
 from .providers import structured, deepseek_text
 from .knowledge import retrieve
+from .skill_runtime import compose_prompt, response_text
 
 PROMPTS = Path(__file__).parent / "prompts"
 
@@ -14,7 +15,7 @@ PROMPTS = Path(__file__).parent / "prompts"
 def mock_plan(message, context):
     m = message.strip()
     if any(x in m for x in ("认字", "支付", "转账")):
-        return Plan(intent="UNAVAILABLE", skill_id=None)
+        return Plan(intent="UNAVAILABLE", skill_id=None, course_id=None)
     skill = next(
         (
             sid
@@ -28,7 +29,9 @@ def mock_plan(message, context):
         ),
         context.focused_skill_id,
     )
-    if any(x in m for x in ("撤回", "撤销", "不是这个")):
+    if m in ("停", "停止", "取消", "算了", "不用了"):
+        intent = "STOP"
+    elif any(x in m for x in ("撤回", "撤销", "不是这个")):
         intent = "CANCEL_ACTION"
     elif any(x in m for x in ("回首页", "返回首页", "打开首页", "回到首页")):
         intent = "OPEN_HOME"
@@ -42,6 +45,8 @@ def mock_plan(message, context):
         intent = "PAUSE_PLAYER"
     elif any(x in m for x in ("继续播放", "播放视频")):
         intent = "RESUME_PLAYER"
+    elif any(x in m for x in ("推荐", "学什么好")):
+        intent = "RECOMMEND_COURSE"
     elif any(x in m for x in ("看看", "有什么课", "有哪些", "浏览")):
         intent = "DISCOVER_SKILL"
     elif any(x in m for x in ("接着上次", "继续学习", "上次的")):
@@ -54,7 +59,7 @@ def mock_plan(message, context):
         intent = "OPEN_LESSON"
     else:
         intent = "UNKNOWN"
-    return Plan.model_validate({"intent": intent, "skill_id": skill})
+    return Plan.model_validate({"intent": intent, "skill_id": skill, "course_id": None})
 
 
 def client():
@@ -63,10 +68,11 @@ def client():
 
 
 def instructions(role):
-    return "\n".join((PROMPTS / f"{name}.md").read_text("utf-8") for name in ("base", role))
+    stage = "intent-recognition" if role == "companion" else "response-generation"
+    return compose_prompt(stage, extra=(PROMPTS / f"{role}.md").read_text("utf-8"))
 
 
-def openai_plan(message, context, catalog=None, pending=None):
+def openai_plan(message, context, catalog=None, pending=None, courses=None):
     schema = Plan.model_json_schema()
     result = client().responses.create(
         model=settings().openai_model,
@@ -79,6 +85,7 @@ def openai_plan(message, context, catalog=None, pending=None):
                 "ui_context": context.model_dump(),
                 "available_catalog": catalog or [{"id": "home-gardening", "name": "家庭园艺"}],
                 "pending_clarification": pending or {},
+                "available_courses": courses or [],
             },
             ensure_ascii=False,
         ),
@@ -100,7 +107,7 @@ def openai_plan(message, context, catalog=None, pending=None):
     return Plan.model_validate_json(calls[0].arguments), result.id
 
 
-def model_plan(message, context, catalog, pending):
+def model_plan(message, context, catalog, pending, courses=None):
     if settings().llm_provider == "deepseek":
         return structured(
             Plan,
@@ -110,9 +117,10 @@ def model_plan(message, context, catalog, pending):
                 "ui_context": context.model_dump(),
                 "available_catalog": catalog,
                 "pending_clarification": pending,
+                "available_courses": courses or [],
             },
         )
-    return openai_plan(message, context, catalog, pending)
+    return openai_plan(message, context, catalog, pending, courses)
 
 
 def tutor_answer(message, course, step):
@@ -142,7 +150,7 @@ def tutor_answer(message, course, step):
         return openai_tutor(message, course, step)
     if not text or any(x in text for x in ("我看到", "我看见", "动作很标准", "转账", "验证码")):
         return "我无法观察动作，也没有足够的课程依据判断。请先暂停，并具体说说您遇到的问题。"
-    return text
+    return response_text(text)
 
 
 def openai_tutor(message, course, step):
@@ -169,7 +177,7 @@ def openai_tutor(message, course, step):
     text = output.output_text.strip()
     if not text or any(x in text for x in ("我看到", "我看见", "动作很标准", "转账", "验证码")):
         return "我无法观察动作，也没有足够的课程依据判断。请先暂停，并具体说说您遇到的问题。"
-    return text
+    return response_text(text)
 
 
 def request_hash(payload):
@@ -189,3 +197,23 @@ class Budget:
         if (time.monotonic() - self.started) * 1000 > settings().turn_deadline_ms:
             raise TimeoutError("TURN_DEADLINE_EXCEEDED")
         self.seen.add(name)
+
+
+def companion_answer(message, history):
+    if settings().llm_provider == "mock":
+        return "我在呢，您慢慢说。想聊聊天或一起学点喜欢的，都可以。"
+    prompt = compose_prompt("response-generation", extra="当前角色是底部语音助手的闲聊模式，无摄像头，也未执行任何业务操作。结合自身最近对话自然回答；不得声称已经操作。")
+    payload = {"message": message, "recent_dialogue": history}
+    if settings().llm_provider == "deepseek":
+        return response_text(deepseek_text(prompt, payload))
+    return response_text(
+        client()
+        .responses.create(
+            model=settings().openai_model,
+            store=False,
+            max_output_tokens=250,
+            instructions=prompt,
+            input=json.dumps(payload, ensure_ascii=False),
+        )
+        .output_text.strip()
+    )

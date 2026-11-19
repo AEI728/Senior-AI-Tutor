@@ -40,8 +40,12 @@ class Plan(Strict):
         "OPEN_COMMUNITY",
         "PAUSE_PLAYER",
         "RESUME_PLAYER",
+        "RECOMMEND_COURSE",
+        "CHAT",
+        "STOP",
     ]
     skill_id: Literal["home-gardening", "calligraphy", "photography", "music"] | None
+    course_id: str | None
 
 
 class TutorDecision(Strict):

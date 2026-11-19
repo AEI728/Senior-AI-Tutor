@@ -31,6 +31,28 @@
         "title": "Ack",
         "type": "object"
       },
+      "Body_camera_feedback_api_v1_camera_feedback_post": {
+        "properties": {
+          "files": {
+            "items": {
+              "contentMediaType": "application/octet-stream",
+              "type": "string"
+            },
+            "title": "Files",
+            "type": "array"
+          },
+          "previous_feedback": {
+            "default": "",
+            "title": "Previous Feedback",
+            "type": "string"
+          }
+        },
+        "required": [
+          "files"
+        ],
+        "title": "Body_camera_feedback_api_v1_camera_feedback_post",
+        "type": "object"
+      },
       "Body_photo_feedback_api_v1_practice_sessions__sid__photo_feedback_post": {
         "properties": {
           "file": {
@@ -73,6 +95,20 @@
         "title": "Body_upload_image_api_v1_community_works__wid__image_put",
         "type": "object"
       },
+      "Body_upload_video_api_v1_community_works__wid__video_put": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_video_api_v1_community_works__wid__video_put",
+        "type": "object"
+      },
       "Command": {
         "additionalProperties": false,
         "properties": {
@@ -91,6 +127,22 @@
           "command"
         ],
         "title": "Command",
+        "type": "object"
+      },
+      "CommentInput": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Body",
+            "type": "string"
+          }
+        },
+        "required": [
+          "body"
+        ],
+        "title": "CommentInput",
         "type": "object"
       },
       "Context": {
@@ -438,6 +490,25 @@
         "title": "ProgressInput",
         "type": "object"
       },
+      "ReactionInput": {
+        "additionalProperties": false,
+        "properties": {
+          "liked": {
+            "title": "Liked",
+            "type": "boolean"
+          },
+          "saved": {
+            "title": "Saved",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "liked",
+          "saved"
+        ],
+        "title": "ReactionInput",
+        "type": "object"
+      },
       "Speech": {
         "additionalProperties": false,
         "properties": {
@@ -610,6 +681,27 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/api/v1/agent/skills": {
+      "get": {
+        "operationId": "agent_skills_api_v1_agent_skills_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Agent Skills"
+      }
+    },
     "/api/v1/agent/turns": {
       "post": {
         "operationId": "agent_turn_api_v1_agent_turns_post",
@@ -948,6 +1040,47 @@
         "summary": "Register"
       }
     },
+    "/api/v1/camera/feedback": {
+      "post": {
+        "operationId": "camera_feedback_api_v1_camera_feedback_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_camera_feedback_api_v1_camera_feedback_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Camera Feedback"
+      }
+    },
     "/api/v1/catalog/courses/{course_id}": {
       "get": {
         "operationId": "course_detail_api_v1_catalog_courses__course_id__get",
@@ -1119,6 +1252,85 @@
         "summary": "Courses"
       }
     },
+    "/api/v1/community/comments/{cid}": {
+      "delete": {
+        "operationId": "remove_comment_api_v1_community_comments__cid__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cid",
+            "required": true,
+            "schema": {
+              "title": "Cid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Remove Comment"
+      }
+    },
+    "/api/v1/community/examples/{eid}/video": {
+      "get": {
+        "operationId": "shared_example_video_api_v1_community_examples__eid__video_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "eid",
+            "required": true,
+            "schema": {
+              "title": "Eid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Shared Example Video"
+      }
+    },
     "/api/v1/community/moderation": {
       "get": {
         "operationId": "queue_api_v1_community_moderation_get",
@@ -1192,6 +1404,152 @@
         "summary": "Moderate"
       }
     },
+    "/api/v1/community/threads/{target}": {
+      "get": {
+        "operationId": "thread_api_v1_community_threads__target__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "target",
+            "required": true,
+            "schema": {
+              "title": "Target",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Thread"
+      }
+    },
+    "/api/v1/community/threads/{target}/comments": {
+      "post": {
+        "operationId": "comment_api_v1_community_threads__target__comments_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "target",
+            "required": true,
+            "schema": {
+              "title": "Target",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Comment"
+      }
+    },
+    "/api/v1/community/threads/{target}/reaction": {
+      "put": {
+        "operationId": "react_api_v1_community_threads__target__reaction_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "target",
+            "required": true,
+            "schema": {
+              "title": "Target",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReactionInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "React"
+      }
+    },
     "/api/v1/community/works": {
       "get": {
         "operationId": "feed_api_v1_community_works_get",
@@ -1203,6 +1561,16 @@
             "schema": {
               "default": false,
               "title": "Mine",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "examples",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Examples",
               "type": "boolean"
             }
           }
@@ -1440,6 +1808,140 @@
         "summary": "Report"
       }
     },
+    "/api/v1/community/works/{wid}/thumbnail": {
+      "get": {
+        "operationId": "work_thumbnail_api_v1_community_works__wid__thumbnail_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "wid",
+            "required": true,
+            "schema": {
+              "title": "Wid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Work Thumbnail"
+      }
+    },
+    "/api/v1/community/works/{wid}/video": {
+      "get": {
+        "operationId": "work_video_api_v1_community_works__wid__video_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "wid",
+            "required": true,
+            "schema": {
+              "title": "Wid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Work Video"
+      },
+      "put": {
+        "operationId": "upload_video_api_v1_community_works__wid__video_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "wid",
+            "required": true,
+            "schema": {
+              "title": "Wid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_video_api_v1_community_works__wid__video_put"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Upload Video"
+      }
+    },
     "/api/v1/dev/session": {
       "post": {
         "operationId": "login_api_v1_dev_session_post",
@@ -1475,6 +1977,27 @@
           }
         ],
         "summary": "Library"
+      }
+    },
+    "/api/v1/library/completed": {
+      "get": {
+        "operationId": "completed_skills_api_v1_library_completed_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Completed Skills"
       }
     },
     "/api/v1/library/{skill_id}": {
@@ -1557,6 +2080,48 @@
           }
         ],
         "summary": "Join"
+      }
+    },
+    "/api/v1/library/{skill_id}/complete": {
+      "post": {
+        "operationId": "complete_skill_api_v1_library__skill_id__complete_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "skill_id",
+            "required": true,
+            "schema": {
+              "title": "Skill Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Complete Skill"
       }
     },
     "/api/v1/me": {
@@ -1910,6 +2475,47 @@
           }
         ],
         "summary": "Telemetry"
+      }
+    },
+    "/api/v1/voice/coach": {
+      "post": {
+        "operationId": "voice_coach_api_v1_voice_coach_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TurnInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Voice Coach"
       }
     },
     "/health/live": {

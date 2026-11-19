@@ -1,0 +1,69 @@
+{
+  "skill": {
+    "id": "music",
+    "name": "节奏入门",
+    "category": "music"
+  },
+  "course": {
+    "id": "music-02-count",
+    "title": "四拍练习",
+    "version": 1,
+    "review_status": "draft",
+    "asset_license_status": "internal_demo",
+    "locale": "zh-CN",
+    "media_path": null,
+    "learning_goal": "四拍练习",
+    "prerequisites": [
+      "准备好工具，保持环境平稳、安全。"
+    ],
+    "steps": [
+      {
+        "no": 1,
+        "title": "准备",
+        "instruction": "坐稳，放松肩膀和双手。",
+        "explanation": "",
+        "safety_notes": [
+          "不需要用力敲击，保持舒适音量。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 2,
+        "title": "练习",
+        "instruction": "轻声数一二三四，每数一下，用一根手指轻点桌面。",
+        "explanation": "",
+        "safety_notes": [
+          "不需要用力敲击，保持舒适音量。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 3,
+        "title": "回看",
+        "instruction": "用同样的舒适速度重复两轮，中间可以停下来。",
+        "explanation": "",
+        "safety_notes": [
+          "不需要用力敲击，保持舒适音量。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      }
+    ],
+    "faq": [
+      {
+        "step_no": 1,
+        "question": "一次没做好怎么办？",
+        "answer": "可以暂停，再按自己的速度试一次。",
+        "verified": false
+      },
+      {
+        "step_no": 2,
+        "question": "需要注意什么？",
+        "answer": "不需要用力敲击，保持舒适音量。",
+        "verified": false
+      }
+    ]
+  }
+}

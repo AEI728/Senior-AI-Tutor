@@ -4,6 +4,23 @@
  */
 
 export interface paths {
+    "/api/v1/agent/skills": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Agent Skills */
+        get: operations["agent_skills_api_v1_agent_skills_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/agent/turns": {
         parameters: {
             query?: never;
@@ -174,6 +191,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/camera/feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Camera Feedback */
+        post: operations["camera_feedback_api_v1_camera_feedback_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/catalog/courses/{course_id}": {
         parameters: {
             query?: never;
@@ -242,6 +276,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/community/comments/{cid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remove Comment */
+        delete: operations["remove_comment_api_v1_community_comments__cid__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/community/examples/{eid}/video": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Shared Example Video */
+        get: operations["shared_example_video_api_v1_community_examples__eid__video_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/community/moderation": {
         parameters: {
             query?: never;
@@ -270,6 +338,57 @@ export interface paths {
         put?: never;
         /** Moderate */
         post: operations["moderate_api_v1_community_moderation__wid__post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/community/threads/{target}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Thread */
+        get: operations["thread_api_v1_community_threads__target__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/community/threads/{target}/comments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Comment */
+        post: operations["comment_api_v1_community_threads__target__comments_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/community/threads/{target}/reaction": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** React */
+        put: operations["react_api_v1_community_threads__target__reaction_put"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -346,6 +465,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/community/works/{wid}/thumbnail": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Work Thumbnail */
+        get: operations["work_thumbnail_api_v1_community_works__wid__thumbnail_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/community/works/{wid}/video": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Work Video */
+        get: operations["work_video_api_v1_community_works__wid__video_get"];
+        /** Upload Video */
+        put: operations["upload_video_api_v1_community_works__wid__video_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/dev/session": {
         parameters: {
             query?: never;
@@ -380,6 +534,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/library/completed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Completed Skills */
+        get: operations["completed_skills_api_v1_library_completed_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/library/{skill_id}": {
         parameters: {
             query?: never;
@@ -393,6 +564,23 @@ export interface paths {
         post?: never;
         /** Remove */
         delete: operations["remove_api_v1_library__skill_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/library/{skill_id}/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Complete Skill */
+        post: operations["complete_skill_api_v1_library__skill_id__complete_post"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -551,6 +739,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/voice/coach": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Voice Coach */
+        post: operations["voice_coach_api_v1_voice_coach_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health/live": {
         parameters: {
             query?: never;
@@ -599,6 +804,16 @@ export interface components {
              */
             result: "applied" | "failed";
         };
+        /** Body_camera_feedback_api_v1_camera_feedback_post */
+        Body_camera_feedback_api_v1_camera_feedback_post: {
+            /** Files */
+            files: string[];
+            /**
+             * Previous Feedback
+             * @default
+             */
+            previous_feedback: string;
+        };
         /** Body_photo_feedback_api_v1_practice_sessions__sid__photo_feedback_post */
         Body_photo_feedback_api_v1_practice_sessions__sid__photo_feedback_post: {
             /** File */
@@ -614,6 +829,11 @@ export interface components {
             /** File */
             file: string;
         };
+        /** Body_upload_video_api_v1_community_works__wid__video_put */
+        Body_upload_video_api_v1_community_works__wid__video_put: {
+            /** File */
+            file: string;
+        };
         /** Command */
         Command: {
             /**
@@ -621,6 +841,11 @@ export interface components {
              * @enum {string}
              */
             command: "START" | "PAUSE" | "RESUME" | "STOP";
+        };
+        /** CommentInput */
+        CommentInput: {
+            /** Body */
+            body: string;
         };
         /** Context */
         Context: {
@@ -741,6 +966,13 @@ export interface components {
             /** Position Seconds */
             position_seconds: number;
         };
+        /** ReactionInput */
+        ReactionInput: {
+            /** Liked */
+            liked: boolean;
+            /** Saved */
+            saved: boolean;
+        };
         /** Speech */
         Speech: {
             /** Reply Id */
@@ -812,6 +1044,26 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    agent_skills_api_v1_agent_skills_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
     agent_turn_api_v1_agent_turns_post: {
         parameters: {
             query?: never;
@@ -1102,6 +1354,39 @@ export interface operations {
             };
         };
     };
+    camera_feedback_api_v1_camera_feedback_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_camera_feedback_api_v1_camera_feedback_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     course_detail_api_v1_catalog_courses__course_id__get: {
         parameters: {
             query?: never;
@@ -1226,6 +1511,66 @@ export interface operations {
             };
         };
     };
+    remove_comment_api_v1_community_comments__cid__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                cid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    shared_example_video_api_v1_community_examples__eid__video_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     queue_api_v1_community_moderation_get: {
         parameters: {
             query?: never;
@@ -1281,10 +1626,112 @@ export interface operations {
             };
         };
     };
+    thread_api_v1_community_threads__target__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                target: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    comment_api_v1_community_threads__target__comments_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                target: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommentInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    react_api_v1_community_threads__target__reaction_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                target: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReactionInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     feed_api_v1_community_works_get: {
         parameters: {
             query?: {
                 mine?: boolean;
+                examples?: boolean;
             };
             header?: never;
             path?: never;
@@ -1469,6 +1916,103 @@ export interface operations {
             };
         };
     };
+    work_thumbnail_api_v1_community_works__wid__thumbnail_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                wid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    work_video_api_v1_community_works__wid__video_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                wid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    upload_video_api_v1_community_works__wid__video_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                wid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_upload_video_api_v1_community_works__wid__video_put"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     login_api_v1_dev_session_post: {
         parameters: {
             query?: never;
@@ -1490,6 +2034,26 @@ export interface operations {
         };
     };
     library_api_v1_library_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    completed_skills_api_v1_library_completed_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -1541,6 +2105,37 @@ export interface operations {
         };
     };
     remove_api_v1_library__skill_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                skill_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    complete_skill_api_v1_library__skill_id__complete_post: {
         parameters: {
             query?: never;
             header?: never;
@@ -1830,6 +2425,39 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    voice_coach_api_v1_voice_coach_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TurnInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
             };
             /** @description Validation Error */
             422: {

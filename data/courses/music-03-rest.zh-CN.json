@@ -1,0 +1,69 @@
+{
+  "skill": {
+    "id": "music",
+    "name": "节奏入门",
+    "category": "music"
+  },
+  "course": {
+    "id": "music-03-rest",
+    "title": "节奏停顿",
+    "version": 1,
+    "review_status": "draft",
+    "asset_license_status": "internal_demo",
+    "locale": "zh-CN",
+    "media_path": null,
+    "learning_goal": "节奏停顿",
+    "prerequisites": [
+      "准备好工具，保持环境平稳、安全。"
+    ],
+    "steps": [
+      {
+        "no": 1,
+        "title": "准备",
+        "instruction": "坐稳，先轻声数一二三四。",
+        "explanation": "",
+        "safety_notes": [
+          "手指或手腕不适时停止练习。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 2,
+        "title": "练习",
+        "instruction": "在一、二、三时各轻拍一下，数到四时不拍。",
+        "explanation": "",
+        "safety_notes": [
+          "手指或手腕不适时停止练习。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 3,
+        "title": "回看",
+        "instruction": "慢慢重复两轮，试着让停顿和拍点一样均匀。",
+        "explanation": "",
+        "safety_notes": [
+          "手指或手腕不适时停止练习。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      }
+    ],
+    "faq": [
+      {
+        "step_no": 1,
+        "question": "一次没做好怎么办？",
+        "answer": "可以暂停，再按自己的速度试一次。",
+        "verified": false
+      },
+      {
+        "step_no": 2,
+        "question": "需要注意什么？",
+        "answer": "手指或手腕不适时停止练习。",
+        "verified": false
+      }
+    ]
+  }
+}

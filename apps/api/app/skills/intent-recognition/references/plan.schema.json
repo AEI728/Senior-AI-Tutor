@@ -1,0 +1,64 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "intent": {
+      "enum": [
+        "ADD_SKILL",
+        "DISCOVER_SKILL",
+        "OPEN_LESSON",
+        "ADD_SKILL_AND_OPEN_LESSON",
+        "CONTINUE_LESSON",
+        "START_PRACTICE",
+        "CANCEL_ACTION",
+        "UNKNOWN",
+        "UNAVAILABLE",
+        "OPEN_HOME",
+        "OPEN_SKILLS",
+        "OPEN_SETTINGS",
+        "OPEN_COMMUNITY",
+        "PAUSE_PLAYER",
+        "RESUME_PLAYER",
+        "RECOMMEND_COURSE",
+        "CHAT",
+        "STOP"
+      ],
+      "title": "Intent",
+      "type": "string"
+    },
+    "skill_id": {
+      "anyOf": [
+        {
+          "enum": [
+            "home-gardening",
+            "calligraphy",
+            "photography",
+            "music"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Skill Id"
+    },
+    "course_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Course Id"
+    }
+  },
+  "required": [
+    "intent",
+    "skill_id",
+    "course_id"
+  ],
+  "title": "Plan",
+  "type": "object"
+}

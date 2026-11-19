@@ -2,7 +2,7 @@ import { defineConfig } from "@playwright/test";
 import path from "node:path";
 export default defineConfig({
   testDir: "./live-e2e",
-  outputDir: "live-test-results",
+  outputDir: "../../artifacts/live-browser",
   timeout: 180000,
   workers: 1,
   use: {
@@ -16,7 +16,7 @@ export default defineConfig({
         "--use-fake-ui-for-media-stream",
         "--use-fake-device-for-media-stream",
         "--use-file-for-fake-audio-capture=" +
-          path.resolve("../../docs/evals/fixtures/user-command.wav") +
+          path.resolve(import.meta.dirname, "./e2e/fixtures/user-command.wav") +
           "%noloop",
       ],
     },

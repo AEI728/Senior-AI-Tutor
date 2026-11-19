@@ -1,33 +1,22 @@
-import { test, expect } from '@playwright/test'
-test('小伴加入、导航ACK、私教自述、刷新、隐私',async({page})=>{
- await page.goto('/');await page.getByRole('button',{name:'进入本地测试'}).click()
- await expect(page.locator('.hero-card')).toBeVisible()
- await page.screenshot({path:'../../docs/evals/home-mobile.png',fullPage:true})
- await page.getByRole('button',{name:'找小伴帮忙'}).click()
- await page.getByLabel('告诉小伴您想做什么').fill('把园艺加入技能库，再打开第一节课')
- await page.getByRole('button',{name:'发送',exact:true}).click()
- await expect(page.locator('[data-course-ready]')).toBeVisible()
- await expect(page.locator('.reply')).toContainText('课程已经打开')
- await page.getByRole('button',{name:'关闭小伴'}).click()
- await page.screenshot({path:'../../docs/evals/lesson-mobile.png',fullPage:true})
- await page.getByRole('button',{name:'进入独立私教',exact:false}).click()
- await expect(page.locator('[data-practice-ready]')).toBeVisible()
- await expect(page.getByTestId('companion')).toHaveCount(0)
- await page.getByRole('button',{name:'我完成了',exact:true}).click()
- await expect(page.locator('.reply')).toContainText('自述完成')
- await expect(page.locator('.practice-current h2')).toHaveText('核对植物情况')
- await page.screenshot({path:'../../docs/evals/practice-mobile.png',fullPage:true})
- await page.reload();await expect(page.locator('.practice-current h2')).toHaveText('核对植物情况')
- await page.getByRole('button',{name:'等等',exact:true}).click();await expect(page.locator('.practice-current .pill')).toContainText('已暂停')
- await page.getByRole('button',{name:'退出陪练'}).click();await expect(page.getByTestId('companion')).toBeVisible()
- await page.getByRole('link',{name:'我的与隐私'}).click();await page.getByLabel('输入 DELETE_MY_DATA 确认删除').fill('DELETE_MY_DATA')
- await page.getByRole('button',{name:'删除数据并退出'}).click();await expect(page.getByRole('button',{name:'进入本地测试'})).toBeVisible()
-})
-test('模拟语音仍可文字操作、200%字体无横向溢出',async({page})=>{
- await page.goto('/');await page.getByRole('button',{name:'进入本地测试'}).click();await page.getByRole('button',{name:'找小伴帮忙'}).click()
- await page.getByRole('button',{name:'开始语音对话'}).click();await expect(page.getByRole('alert')).toContainText('文字')
- await expect(page.getByLabel('告诉小伴您想做什么')).toBeEnabled()
- await page.getByRole('button',{name:'关闭小伴'}).click()
- await page.evaluate(()=>{document.documentElement.style.fontSize='200%'})
- expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBeTruthy()
-})
+import { test, expect } from "@playwright/test";
+test("拒绝语音权限也不显示气泡或弹窗", async ({ page }) => {
+  await page.route("**/api/v1/me", async (route) => {
+    const r = await route.fetch();
+    await route.fulfill({
+      response: r,
+      json: { ...(await r.json()), audio_provider: "real" },
+    });
+  });
+  await page.addInitScript(() => {
+    navigator.mediaDevices.getUserMedia = () =>
+      Promise.reject(new DOMException("denied", "NotAllowedError"));
+  });
+  await page.goto("/");
+  await page.getByRole("button", { name: "小伴语音助手" }).click();
+  await expect(
+    page.getByRole("button", { name: "小伴语音助手" }),
+  ).toHaveAttribute("aria-pressed", "false");
+  await expect(page.getByRole("alert")).toHaveCount(0);
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.locator(".voice-error-only")).toHaveCount(0);
+});

@@ -1,0 +1,69 @@
+{
+  "skill": {
+    "id": "home-gardening",
+    "name": "家庭园艺",
+    "category": "home-gardening"
+  },
+  "course": {
+    "id": "gardening-02-watering",
+    "title": "浇水判断",
+    "version": 1,
+    "review_status": "draft",
+    "asset_license_status": "internal_demo",
+    "locale": "zh-CN",
+    "media_path": null,
+    "learning_goal": "浇水判断",
+    "prerequisites": [
+      "准备好工具，保持环境平稳、安全。"
+    ],
+    "steps": [
+      {
+        "no": 1,
+        "title": "准备",
+        "instruction": "把花盆放在平稳托盘上，先看植物养护说明。",
+        "explanation": "",
+        "safety_notes": [
+          "盆土仍湿时不要反复加水。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 2,
+        "title": "练习",
+        "instruction": "轻触表层盆土。仍湿润时先不浇水；不同植物要求不同。",
+        "explanation": "",
+        "safety_notes": [
+          "盆土仍湿时不要反复加水。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 3,
+        "title": "回看",
+        "instruction": "按植物要求少量缓慢浇水，等余水流出后倒掉托盘积水。",
+        "explanation": "",
+        "safety_notes": [
+          "盆土仍湿时不要反复加水。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      }
+    ],
+    "faq": [
+      {
+        "step_no": 1,
+        "question": "一次没做好怎么办？",
+        "answer": "可以暂停，再按自己的速度试一次。",
+        "verified": false
+      },
+      {
+        "step_no": 2,
+        "question": "需要注意什么？",
+        "answer": "盆土仍湿时不要反复加水。",
+        "verified": false
+      }
+    ]
+  }
+}

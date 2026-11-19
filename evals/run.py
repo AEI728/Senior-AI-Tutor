@@ -13,11 +13,12 @@ sys.path.insert(0, str(root / 'apps/api'))
 from app.schemas import Context  # noqa: E402
 from app.agent import mock_plan, model_plan  # noqa: E402
 from app.config import settings  # noqa: E402
+from app.skill_runtime import manifest  # noqa: E402
 if args.provider == 'live' and settings().llm_provider == 'mock':
     raise SystemExit('BLOCKED_EXTERNAL_DEPENDENCY: real provider required')
 report = {'time_utc': datetime.now(timezone.utc).isoformat(), 'provider': args.provider,
           'model': (settings().deepseek_model if settings().llm_provider=='deepseek' else settings().openai_model) if args.provider == 'live' else 'deterministic-rules-v2',
-          'prompt_version': 'base-v1/companion-v2', 'results': []}
+          'agent_assets': manifest(), 'results': []}
 for line in (root / 'evals/cases/holdout.jsonl').read_text('utf-8').splitlines():
     case = json.loads(line)
     context = Context.model_validate(case.get('context', {}))
@@ -25,7 +26,7 @@ for line in (root / 'evals/cases/holdout.jsonl').read_text('utf-8').splitlines()
         [{'id':'home-gardening','name':'家庭园艺'},{'id':'calligraphy','name':'书法入门'},{'id':'photography','name':'手机摄影'},{'id':'music','name':'节奏入门'}],{})[0]
     passed = plan.intent == case['expected']['intent']
     report['results'].append({'id': case['id'], 'expected': case['expected']['intent'], 'actual': plan.intent, 'passed': passed})
-output = root / f'docs/evals/intent-{args.provider}.json'
+output = root / f'artifacts/intent-{args.provider}.json'
 output.parent.mkdir(exist_ok=True, parents=True)
 output.write_text(json.dumps(report, ensure_ascii=False, indent=2), 'utf-8')
 count = sum(r['passed'] for r in report['results'])

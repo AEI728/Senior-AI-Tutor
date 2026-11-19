@@ -1,0 +1,69 @@
+{
+  "skill": {
+    "id": "calligraphy",
+    "name": "书法入门",
+    "category": "calligraphy"
+  },
+  "course": {
+    "id": "calligraphy-02-vertical",
+    "title": "竖线练习",
+    "version": 1,
+    "review_status": "draft",
+    "asset_license_status": "internal_demo",
+    "locale": "zh-CN",
+    "media_path": null,
+    "learning_goal": "竖线练习",
+    "prerequisites": [
+      "准备好工具，保持环境平稳、安全。"
+    ],
+    "steps": [
+      {
+        "no": 1,
+        "title": "准备",
+        "instruction": "放好纸笔，坐稳，肩膀和手腕放松。",
+        "explanation": "",
+        "safety_notes": [
+          "手腕疲劳时停下来休息。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 2,
+        "title": "练习",
+        "instruction": "从上向下轻轻画一条竖线，按舒适速度落笔。",
+        "explanation": "",
+        "safety_notes": [
+          "手腕疲劳时停下来休息。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 3,
+        "title": "回看",
+        "instruction": "再画两条，比较方向和间距，不必反复描粗。",
+        "explanation": "",
+        "safety_notes": [
+          "手腕疲劳时停下来休息。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      }
+    ],
+    "faq": [
+      {
+        "step_no": 1,
+        "question": "一次没做好怎么办？",
+        "answer": "可以暂停，再按自己的速度试一次。",
+        "verified": false
+      },
+      {
+        "step_no": 2,
+        "question": "需要注意什么？",
+        "answer": "手腕疲劳时停下来休息。",
+        "verified": false
+      }
+    ]
+  }
+}

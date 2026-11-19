@@ -4,9 +4,9 @@ import pytest
 
 # Explicit test database. Never overwrite a non-test production database.
 os.environ.setdefault("APP_ENV", "test")
-os.environ.setdefault(
-    "DATABASE_URL", "sqlite:///" + str(Path(__file__).parent / "test.db").replace("\\", "/")
-)
+test_db = Path(__file__).resolve().parents[3] / "artifacts/databases/api-test.db"
+test_db.parent.mkdir(parents=True, exist_ok=True)
+os.environ.setdefault("DATABASE_URL", "sqlite:///" + test_db.as_posix())
 os.environ["LLM_PROVIDER"] = "mock"
 os.environ["AUDIO_PROVIDER"] = "mock"
 os.environ["REQUESTS_PER_MINUTE"] = "10000"

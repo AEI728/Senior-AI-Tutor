@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "小伴：启动前后端",
+      "type": "process",
+      "command": "${workspaceFolder}/apps/api/.venv/bin/python",
+      "windows": {"command": "${workspaceFolder}/apps/api/.venv/Scripts/python.exe"},
+      "args": ["scripts/tasks.py", "local"],
+      "options": {"cwd": "${workspaceFolder}"},
+      "presentation": {"reveal": "always", "panel": "dedicated"},
+      "problemMatcher": []
+    },
+    {
+      "label": "小伴：仅启动前端",
+      "type": "process",
+      "command": "${workspaceFolder}/apps/api/.venv/bin/python",
+      "windows": {"command": "${workspaceFolder}/apps/api/.venv/Scripts/python.exe"},
+      "args": ["scripts/tasks.py", "web-dev"],
+      "options": {"cwd": "${workspaceFolder}"},
+      "presentation": {"reveal": "always", "panel": "dedicated"},
+      "problemMatcher": []
+    }
+  ]
+}

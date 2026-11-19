@@ -1,10 +1,13 @@
 import { defineConfig } from "@playwright/test";
 import path from "node:path";
+import fs from "node:fs";
 const root = path.resolve("../..");
+fs.mkdirSync(path.join(root, "artifacts/databases"), { recursive: true });
 const database =
-  "sqlite:///" + path.join(root, "e2e-test.db").replaceAll("\\", "/");
+  "sqlite:///" + path.join(root, "artifacts/databases/e2e-test.db").replaceAll("\\", "/");
 export default defineConfig({
   testDir: "./e2e",
+  outputDir: "../../artifacts/browser",
   timeout: 180000,
   expect: { timeout: 15000 },
   workers: 1,

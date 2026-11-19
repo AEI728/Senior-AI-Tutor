@@ -1,0 +1,62 @@
+[
+  {
+    "id": "example-garden",
+    "skill_id": "home-gardening",
+    "author": "小林",
+    "title": "阳台绿植",
+    "description": "整理阳台绿植。",
+    "media_file": "garden.mp4",
+    "state": "APPROVED",
+    "is_example": true,
+    "is_mine": false,
+    "video_available": true,
+    "image_available": false,
+    "created_at": "2026-11-18T00:00:00+00:00",
+    "likes": 0
+  },
+  {
+    "id": "example-writing",
+    "skill_id": "calligraphy",
+    "author": "阿琴",
+    "title": "写字练习",
+    "description": "练习钢笔字。",
+    "media_file": "writing.mp4",
+    "state": "APPROVED",
+    "is_example": true,
+    "is_mine": false,
+    "video_available": true,
+    "image_available": false,
+    "created_at": "2026-11-18T00:00:00+00:00",
+    "likes": 0
+  },
+  {
+    "id": "example-light",
+    "skill_id": "photography",
+    "author": "阿远",
+    "title": "晨光摄影",
+    "description": "记录清晨光线。",
+    "media_file": "light.mp4",
+    "state": "APPROVED",
+    "is_example": true,
+    "is_mine": false,
+    "video_available": true,
+    "image_available": false,
+    "created_at": "2026-11-18T00:00:00+00:00",
+    "likes": 0
+  },
+  {
+    "id": "example-music",
+    "skill_id": "music",
+    "author": "知音",
+    "title": "音乐练习",
+    "description": "今天的音乐练习。",
+    "media_file": "music.mp4",
+    "state": "APPROVED",
+    "is_example": true,
+    "is_mine": false,
+    "video_available": true,
+    "image_available": false,
+    "created_at": "2026-11-18T00:00:00+00:00",
+    "likes": 0
+  }
+]

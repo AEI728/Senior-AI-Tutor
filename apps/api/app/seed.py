@@ -23,7 +23,14 @@ def seed_one(path):
 
 
 def seed():
-    for path in sorted((ROOT / "data/courses").glob("*.json")):
+    for path in sorted(
+        (ROOT / "data/courses").glob("*.json"),
+        key=lambda p: (
+            p.stem.split(".")[0]
+            not in ("repotting-basics", "calligraphy-lines", "phone-composition", "rhythm-basics"),
+            p.name,
+        ),
+    ):
         seed_one(path)
 
 

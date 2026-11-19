@@ -42,6 +42,15 @@ try:
         assert browse['intent']=='DISCOVER_SKILL' and browse['ui_actions'][0]['type']=='OPEN_PAGE'
         assert len(c.get('/api/v1/library').json()['items'])==1
         result['browse_no_join']='PASS'
+        # Sample frames are repository demo images, never local camera captures.
+        sample=(root/'apps/web/public/images/calligraphy.jpg').read_bytes()
+        camera=c.post('/api/v1/camera/feedback',files=[('files',('sample.jpg',sample,'image/jpeg')) for _ in range(3)])
+        camera.raise_for_status();assert camera.json()['feedback'] and camera.json()['frame_count']==3
+        result['real_image_feedback']='PASS'
+        coach=c.post('/api/v1/voice/coach',json={'agent_role':'companion','client_request_id':str(uuid4()),'message':'我正在练习写字，应该先注意什么？','ui_context':{'page':'practice'}})
+        coach.raise_for_status();assert coach.json()['intent']=='VOICE_COACH'
+        c.post('/api/v1/audio/speech',json={'reply_id':coach.json()['reply']['id']}).raise_for_status()
+        result['voice_coach_and_tts']='PASS'
         # API-only run deliberately does not fabricate a browser navigation ACK.
         result['browser_navigation']='NOT_RUN_IN_THIS_SCRIPT'
         c.request('DELETE','/api/v1/me/data',json={'confirmation':'DELETE_MY_DATA'}).raise_for_status()
@@ -49,6 +58,9 @@ try:
 except Exception as e:
     result['status']='FAIL';result['error_code']=getattr(e,'code',type(e).__name__)
 result['duration_seconds']=round(time.monotonic()-started,2)
-(root/'docs/evals/deepseek-end-to-end-2026-11-16.json').write_text(json.dumps(result,ensure_ascii=False,indent=2),'utf-8')
+from datetime import datetime, timedelta, timezone
+report_date=datetime.now(timezone(timedelta(hours=8))).date().isoformat()
+(root/'artifacts').mkdir(exist_ok=True)
+(root/'artifacts'/('deepseek-end-to-end-'+report_date+'.json')).write_text(json.dumps(result,ensure_ascii=False,indent=2),'utf-8')
 print(json.dumps(result,ensure_ascii=False))
 raise SystemExit(0 if result['status']=='PASS' else 1)

@@ -4,9 +4,12 @@ import os
 from pathlib import Path
 import shutil
 import signal
+import socket
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
+from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
 API = ROOT / 'apps/api'
@@ -14,6 +17,97 @@ WEB = ROOT / 'apps/web'
 PY = API / ('.venv/Scripts/python.exe' if os.name == 'nt' else '.venv/bin/python')
 PNPM = shutil.which('pnpm.cmd' if os.name == 'nt' else 'pnpm') or 'pnpm'
 ENV = dict(os.environ)
+
+
+def api_port():
+    from dotenv import dotenv_values
+    values=dotenv_values(ROOT / '.env')
+    value=ENV.get('APP_PORT') or ENV.get('PORT') or values.get('APP_PORT') or values.get('PORT') or '8000'
+    try:
+        port=int(value)
+        if not 1 <= port <= 65535:raise ValueError
+    except ValueError:
+        raise SystemExit('PORT / APP_PORT 必须是1到65535之间的整数。') from None
+    return str(port)
+
+
+def web_command():
+    # Local development uses the installed Vite entry directly. No global pnpm required.
+    node=shutil.which('node.exe' if os.name=='nt' else 'node')
+    vite=WEB/'node_modules/vite/bin/vite.js'
+    if not node:raise SystemExit('未找到 Node.js。请安装 Node.js 22或更新版本，然后重新打开 VS Code/终端。')
+    if not vite.is_file():raise SystemExit('前端依赖尚未安装。请在 apps/web 执行 pnpm install --frozen-lockfile。')
+    return [node,str(vite),'--host','127.0.0.1','--port','5173','--strictPort']
+
+
+def port_busy(port):
+    with socket.socket() as sock:
+        sock.settimeout(.5)
+        return sock.connect_ex(('127.0.0.1',int(port)))==0
+
+
+def app_health(port):
+    try:
+        with urlopen('http://127.0.0.1:'+str(port)+'/health/ready',timeout=2) as response:
+            value=json.load(response)
+        if value.get('status')=='ok' and 'mock_mode' in value and value.get('database') in ('sqlite','postgresql'):
+            return value
+    except Exception:
+        pass
+    return None
+
+
+def stop_processes(processes):
+    # Only stop processes started by this invocation; reused services belong to their original launcher.
+    for process in reversed(processes):
+        if process.poll() is not None:continue
+        if os.name=='nt':
+            subprocess.run(['taskkill','/PID',str(process.pid),'/T','/F'],capture_output=True)
+        else:
+            process.send_signal(signal.SIGTERM)
+        try:process.wait(timeout=5)
+        except subprocess.TimeoutExpired:process.kill()
+
+
+def start_local(name):
+    port='8000' if name=='preview-local' else api_port()
+    frontend=web_command()  # Check all executables before spawning either service.
+    backend=[str(PY),'-m','uvicorn','app.main:app','--host','127.0.0.1','--port',port,'--no-access-log']
+    if not PY.is_file():raise SystemExit('后端虚拟环境不存在，请先在 apps/api 执行 uv sync --frozen。')
+    api_running=port_busy(port)
+    existing=app_health(port) if api_running else None
+    if api_running and not existing:raise SystemExit('后端端口 '+port+' 已被其他进程占用。请先确认占用者，或修改.env里的PORT。')
+    if existing and name=='preview-local' and (not existing.get('mock_mode') or existing.get('audio_provider')!='mock'):
+        raise SystemExit('该端口运行着真实服务；请先在原终端Ctrl+C停止，再启动模拟模式。')
+    web_running=port_busy('5173')
+    if web_running and (not existing or app_health('5173')!=existing):
+        raise SystemExit('5173端口已有服务，但未确认它连接当前后端。请在原终端Ctrl+C后重新启动。')
+    if existing:print('检测到已运行的小伴后端，复用 http://localhost:'+port,flush=True)
+    if api_running and web_running:
+        print('前后端已在运行，直接打开 http://localhost:5173 ，无需重复启动。',flush=True)
+        return
+    if name=='preview-local':
+        ENV.update(DATABASE_URL='sqlite:///'+(ROOT/'local-preview.db').as_posix(),APP_ENV='local',LLM_PROVIDER='mock',AUDIO_PROVIDER='mock',USE_MOCK_LLM='true',REQUESTS_PER_MINUTE='300')
+        print('显式模拟模式：SQLite + mock，不调用真实模型。',flush=True)
+    if name in ('local','preview-local') and not api_running:
+        task('migrate');task('seed')
+    ENV['API_PROXY_TARGET']='http://127.0.0.1:'+port
+    processes=[]
+    try:
+        if not api_running:processes.append(subprocess.Popen(backend,cwd=API,env=ENV))
+        if not web_running:processes.append(subprocess.Popen(frontend,cwd=WEB,env=ENV))
+        print('网页 http://localhost:5173 | API http://localhost:'+port+'/docs\n保持此终端打开；Ctrl+C停止本次启动的服务。',flush=True)
+        while True:
+            for process in processes:
+                if process.poll() is not None:
+                    raise SystemExit('服务已停止，退出码 '+str(process.returncode)+'。本次启动的其他服务已清理。')
+            time.sleep(.25)
+    except KeyboardInterrupt:
+        pass
+    except OSError:
+        raise SystemExit('启动服务失败，请检查 Node.js、Python环境及端口。本次启动的进程已清理。') from None
+    finally:
+        stop_processes(processes)
 
 
 def public_command_value(value):
@@ -31,7 +125,7 @@ def run(args, cwd=ROOT, env=None):
     except FileNotFoundError:
         print('BLOCKED: executable missing: ' + str(args[0]))
         code = 2
-    folder = ROOT / 'docs/evals'
+    folder = ROOT / 'artifacts'
     folder.mkdir(parents=True, exist_ok=True)
     with (folder / 'commands.jsonl').open('a', encoding='utf-8') as log:
         log.write(json.dumps({'time_utc': started, 'cwd': public_command_value(cwd), 'command': [public_command_value(x) for x in args],
@@ -81,7 +175,9 @@ def task(name):
                 raise SystemExit(2)
             env['DATABASE_URL'] = url
         else:
-            env['DATABASE_URL'] = 'sqlite:///' + (API / 'tests/test.db').as_posix()
+            test_db=ROOT/'artifacts/databases/api-test.db'
+            test_db.parent.mkdir(parents=True,exist_ok=True)
+            env['DATABASE_URL'] = 'sqlite:///' + test_db.as_posix()
         python('-m', 'pytest', 'tests/unit' if name == 'test-unit' else 'tests/integration', '-q', env=env)
     elif name == 'test-web':
         run([PNPM, 'test', '--run'], WEB)
@@ -92,44 +188,16 @@ def task(name):
         python('-c', 'from app.main import app; assert app.title')
         run([PNPM, 'build'], WEB)
     elif name == 'contract':
+        run([PY, ROOT / 'scripts/check_agent_skills.py'])
         run([PY, ROOT / 'scripts/export_contract.py', '--check'])
         run([PNPM, 'exec', 'openapi-typescript', '../../docs/api/openapi.snapshot.json', '--check', '-o', 'src/generated/api.d.ts'], WEB)
     elif name == 'api-dev':
-        python('-m', 'uvicorn', 'app.main:app', '--host', '127.0.0.1', '--port', '8000')
+        python('-m', 'uvicorn', 'app.main:app', '--host', '127.0.0.1', '--port', api_port())
     elif name == 'web-dev':
-        run([PNPM, 'dev', '--host', '127.0.0.1'], WEB)
+        ENV['API_PROXY_TARGET']='http://127.0.0.1:'+api_port()
+        run(web_command(), WEB)
     elif name in ('dev', 'local', 'preview-local'):
-        if name == 'preview-local':
-            ENV['DATABASE_URL'] = 'sqlite:///' + (ROOT / 'local-preview.db').as_posix()
-            ENV['APP_ENV'] = 'local'
-            ENV['LLM_PROVIDER'] = ENV['AUDIO_PROVIDER'] = 'mock'
-            ENV['USE_MOCK_LLM'] = 'true'
-            ENV['REQUESTS_PER_MINUTE'] = '300'
-            print('EXPLICIT LOCAL PREVIEW: SQLite + mock; no real AI acceptance', flush=True)
-            task('migrate')
-            task('seed')
-        if name == 'local':
-            task('migrate')
-            task('seed')
-        port = ENV.get('APP_PORT', ENV.get('PORT', '8000'))
-        if name != 'preview-local':
-            from dotenv import dotenv_values
-            values = dotenv_values(ROOT / '.env')
-            port = ENV.get('APP_PORT', ENV.get('PORT', values.get('APP_PORT', values.get('PORT', '8000'))))
-        ENV['API_PROXY_TARGET'] = 'http://127.0.0.1:' + str(port)
-        processes = [subprocess.Popen([str(PY), '-m', 'uvicorn', 'app.main:app', '--host', '127.0.0.1', '--port', str(port), '--no-access-log'], cwd=API, env=ENV),
-                     subprocess.Popen([PNPM, 'dev', '--host', '127.0.0.1'], cwd=WEB, env=ENV)]
-        try:
-            print('Web http://localhost:5173 | API http://localhost:' + str(port) + '/docs', flush=True)
-            processes[0].wait()
-        except KeyboardInterrupt:
-            pass
-        finally:
-            for process in processes:
-                if os.name == 'nt':
-                    subprocess.run(['taskkill', '/PID', str(process.pid), '/T', '/F'], capture_output=True)
-                else:
-                    process.send_signal(signal.SIGTERM)
+        start_local(name)
     elif name == 'e2e':
         run([PNPM, 'e2e'], WEB)
     elif name in ('eval-mock', 'eval-live'):
@@ -146,7 +214,7 @@ def task(name):
         else:
             run([PY, ROOT / 'scripts/smoke.py'])
     elif name == 'ci':
-        for item in ('lint', 'typecheck', 'test', 'build', 'e2e', 'eval-mock', 'smoke'):
+        for item in ('lint', 'typecheck', 'test', 'contract', 'build', 'e2e', 'eval-mock', 'smoke'):
             task(item)
     else:
         raise SystemExit('Unknown task: ' + name)

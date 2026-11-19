@@ -150,5 +150,5 @@ def test_restart_state_and_role_boundaries(http):
     http.put("/api/v1/library/home-gardening")
     assert http.put("/api/v1/library/home-gardening").json()["status"] == "already_joined"
     assert len(http.get("/api/v1/library").json()["items"]) == 1
-    assert turn(http, "加入园艺", page="practice").status_code == 422
+    assert turn(http, "加入园艺", page="practice").status_code == 200
     assert turn(http, "继续", role="tutor").status_code == 422

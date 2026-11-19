@@ -15,8 +15,11 @@ class ProviderError(RuntimeError):
 
 def retry(call):
     cfg = settings()
+    from .skill_runtime import load_skill
+
+    retries = min(cfg.max_retry_attempts, load_skill("failure-recovery")["policy"]["safe_retries"])
     deadline = time.monotonic() + cfg.provider_timeout_seconds
-    for attempt in range(cfg.max_retry_attempts + 1):
+    for attempt in range(retries + 1):
         try:
             return call()
         except (APIConnectionError, APITimeoutError, httpx.TransportError):
@@ -31,7 +34,7 @@ def retry(call):
             retryable = status in (429, 500, 502, 503, 504)
         if (
             not retryable
-            or attempt >= cfg.max_retry_attempts
+            or attempt >= retries
             or time.monotonic() + 0.4 * 2**attempt >= deadline
         ):
             raise ProviderError(code) from None

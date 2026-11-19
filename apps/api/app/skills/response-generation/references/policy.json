@@ -1,0 +1,33 @@
+{
+  "version": "1.1.0",
+  "max_sentences": 3,
+  "max_chars": 140,
+  "forbidden_claims": [
+    "动作达标",
+    "动作很标准",
+    "已经核验",
+    "爷爷奶奶",
+    "真听话",
+    "只有我懂您",
+    "我会永远陪着您"
+  ],
+  "templates": {
+    "added": "{name}已加入技能库。",
+    "already_joined": "{name}已经在您的技能库中了。",
+    "opening": "正在打开，请稍候。",
+    "browse": "正在打开课程列表。",
+    "undo": "已撤销最近一次加入，原有课程进度保留。",
+    "no_undo": "目前没有可撤销的加入操作。",
+    "clarify": "您想先做哪一项？",
+    "manual_fallback": "您可以点底部的技能广场，选择想学的内容。",
+    "unavailable": "这项操作暂未开放。",
+    "uncertain": "我现在还不能确定。您可以具体说说遇到了什么问题。",
+    "failed": "服务暂时不可用，您可以使用页面按钮继续。",
+    "partial": "{name}已加入技能库，但后续操作未完成。",
+    "page_failed": "页面暂时没打开，请使用页面入口。",
+    "page_expired": "页面回执已超时，无法确认是否打开。",
+    "stopped": "已停止待执行操作。",
+    "no_match": "暂时没有匹配的课程。",
+    "missing_metadata": "课程还没有标注您要求的{fields}，我暂时无法按这个条件推荐。"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "skill": {
+    "id": "photography",
+    "name": "手机摄影",
+    "category": "photography"
+  },
+  "course": {
+    "id": "photography-03-focus",
+    "title": "对焦拍摄",
+    "version": 1,
+    "review_status": "draft",
+    "asset_license_status": "internal_demo",
+    "locale": "zh-CN",
+    "media_path": null,
+    "learning_goal": "对焦拍摄",
+    "prerequisites": [
+      "准备好工具，保持环境平稳、安全。"
+    ],
+    "steps": [
+      {
+        "no": 1,
+        "title": "准备",
+        "instruction": "坐稳或站稳，双手拿稳手机，打开相机。",
+        "explanation": "",
+        "safety_notes": [
+          "不要边走边拍，不将手机伸出危险边缘。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 2,
+        "title": "练习",
+        "instruction": "轻点屏幕里的主体，等画面清晰后再按快门。",
+        "explanation": "",
+        "safety_notes": [
+          "不要边走边拍，不将手机伸出危险边缘。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      },
+      {
+        "no": 3,
+        "title": "回看",
+        "instruction": "放大查看照片，比较主体是否清楚，再试一次。",
+        "explanation": "",
+        "safety_notes": [
+          "不要边走边拍，不将手机伸出危险边缘。"
+        ],
+        "completion_rule": "用户自述完成",
+        "source_role": "platform_editor"
+      }
+    ],
+    "faq": [
+      {
+        "step_no": 1,
+        "question": "一次没做好怎么办？",
+        "answer": "可以暂停，再按自己的速度试一次。",
+        "verified": false
+      },
+      {
+        "step_no": 2,
+        "question": "需要注意什么？",
+        "answer": "不要边走边拍，不将手机伸出危险边缘。",
+        "verified": false
+      }
+    ]
+  }
+}

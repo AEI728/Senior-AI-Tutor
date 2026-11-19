@@ -52,6 +52,13 @@ class Library(Base):
     joined_at: Mapped[str] = mapped_column(String, default=now)
 
 
+class CompletedSkill(Base):
+    __tablename__ = "completed_skill"
+    user_id: Mapped[str] = mapped_column(ForeignKey("app_user.id"), primary_key=True)
+    skill_id: Mapped[str] = mapped_column(ForeignKey("skill.id"), primary_key=True)
+    completed_at: Mapped[str] = mapped_column(String, default=now)
+
+
 class Progress(Base):
     __tablename__ = "lesson_progress"
     user_id: Mapped[str] = mapped_column(ForeignKey("app_user.id"), primary_key=True)
@@ -158,6 +165,30 @@ class WorkMedia(Base):
     __tablename__ = "work_media"
     work_id: Mapped[str] = mapped_column(ForeignKey("community_work.id"), primary_key=True)
     image_data: Mapped[bytes] = mapped_column(LargeBinary)
+
+
+class WorkVideo(Base):
+    __tablename__ = "work_video"
+    work_id: Mapped[str] = mapped_column(ForeignKey("community_work.id"), primary_key=True)
+    video_data: Mapped[bytes] = mapped_column(LargeBinary)
+    media_type: Mapped[str] = mapped_column(String)
+
+
+class FeedReaction(Base):
+    __tablename__ = "feed_reaction"
+    user_id: Mapped[str] = mapped_column(ForeignKey("app_user.id"), primary_key=True)
+    target: Mapped[str] = mapped_column(String, primary_key=True)
+    liked: Mapped[bool] = mapped_column(Boolean, default=False)
+    saved: Mapped[bool] = mapped_column(Boolean, default=False)
+
+
+class FeedComment(Base):
+    __tablename__ = "feed_comment"
+    id: Mapped[str] = mapped_column(String, primary_key=True, default=uid)
+    user_id: Mapped[str] = mapped_column(ForeignKey("app_user.id"), index=True)
+    target: Mapped[str] = mapped_column(String, index=True)
+    body: Mapped[str] = mapped_column(String)
+    created_at: Mapped[str] = mapped_column(String, default=now)
 
 
 engine = create_engine(
