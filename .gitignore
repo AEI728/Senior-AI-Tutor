@@ -28,3 +28,11 @@ docs/evals/fixtures/
 *.zip
 
 designs/reference-inspection/
+
+# Local project notes; not part of the distributed application.
+代码结构说明.md
+docs/verification.md
+docs/reference/
+docs/security/source-publication.md
+docs/security/release-gates.md
+evals/cases/bad_cases.jsonl

@@ -1,6 +1,6 @@
 # 当前代码架构
 
-本文件说明现行实现。原始需求和初期设想见reference目录，它们不作为当前代码运行指令。
+前端采用 React / TypeScript，后端采用 FastAPI / SQLAlchemy，默认使用 SQLite 保存本地业务数据。
 
 ## 运行结构
 
@@ -35,4 +35,4 @@ alembic/versions中的0001至0005构成升级链：初始学习与会话、账�
 
 ## 产物和依赖
 
-artifacts集中保存可重新生成的验证结果；backups保存私有备份。前端dist、node_modules和后端.venv均由构建／安装生成，不是业务源码。验证方法及最新结果见verification.md。
+artifacts保存构建与测试产物；backups保存本地备份，均不提交Git。前端dist、node_modules和后端.venv由构建或安装生成。本地启动方式见根目录README。
