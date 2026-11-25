@@ -12,6 +12,7 @@ class Context(Strict):
     skill_id: str | None = None
     course_id: str | None = None
     focused_skill_id: str | None = None
+    focused_work_id: str | None = Field(default=None, max_length=100)
     last_visible_action_id: str | None = None
 
 
@@ -26,6 +27,7 @@ class TurnInput(Strict):
 class Plan(Strict):
     intent: Literal[
         "ADD_SKILL",
+        "REMOVE_SKILL",
         "DISCOVER_SKILL",
         "OPEN_LESSON",
         "ADD_SKILL_AND_OPEN_LESSON",

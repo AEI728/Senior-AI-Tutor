@@ -170,6 +170,18 @@
             ],
             "title": "Focused Skill Id"
           },
+          "focused_work_id": {
+            "anyOf": [
+              {
+                "maxLength": 100,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Focused Work Id"
+          },
           "last_visible_action_id": {
             "anyOf": [
               {

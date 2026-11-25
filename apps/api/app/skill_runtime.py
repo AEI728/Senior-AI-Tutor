@@ -10,7 +10,7 @@ import re
 from pathlib import Path
 from sqlalchemy import select, delete
 from .config import settings
-from .db import Course, Library, Progress, Skill, Operation, Action, Turn, Reply
+from .db import Course, Library, Progress, Skill, Operation, Action, Turn, Reply, Work
 from .schemas import Plan
 
 ROOT = Path(__file__).parent
@@ -89,6 +89,35 @@ def course_candidates(db):
         for c in db.scalars(select(Course).order_by(Course.id))
         if settings().app_env in ("local", "test") or c.data.get("review_status") == "approved"
     ]
+
+
+def resolve_page_context(db, user, context):
+    """Resolve only readable persisted work metadata, never client-provided titles/IDs."""
+    if context.page not in ("community", "recommendation"):
+        if context.page == "lesson" and context.course_id:
+            course = db.get(Course, context.course_id)
+            if course:
+                return context.model_copy(update={"focused_skill_id": course.skill_id}), None
+        return context, None
+    resolved = context.model_copy(update={"focused_skill_id": None, "course_id": None})
+    if not context.focused_work_id:
+        return resolved, None
+    from .examples import example_items
+
+    item = next((w for w in example_items() if w["id"] == context.focused_work_id), None)
+    if item:
+        return resolved.model_copy(update={"focused_skill_id": item["skill_id"]}), {
+            "title": item["title"], "description": item["description"], "skill_id": item["skill_id"],
+        }
+    work = db.get(Work, context.focused_work_id)
+    if not work or not (work.user_id == user.id or (work.state == "APPROVED" and not work.reported)):
+        return resolved, None
+    course = db.get(Course, work.course_id)
+    if not course:
+        return resolved, None
+    return resolved.model_copy(update={"focused_skill_id": course.skill_id, "course_id": course.id}), {
+        "title": work.title, "description": work.description, "skill_id": course.skill_id,
+    }
 
 
 def recommend_courses(db, user, plan, message):

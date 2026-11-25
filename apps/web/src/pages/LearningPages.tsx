@@ -10,6 +10,7 @@ import {
   Play,
   Plus,
   Sparkles,
+  Search,
   X,
 } from "lucide-react";
 import { api, friendly } from "../lib/api";
@@ -119,13 +120,40 @@ export function HomePage() {
 export function SkillsPage() {
   const { skills, library, completed, loading, error } = useLearning();
   const [filter, setFilter] = useState("all");
+  const [query, setQuery] = useState("");
+  const searchTerms: Record<string, string> = {
+    "home-gardening": "养花 花草 盆栽 种花",
+    calligraphy: "写字 毛笔 练字",
+    photography: "拍照 手机拍照 照相",
+    music: "音乐 节奏 演奏",
+  };
+  const keywords = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
   const joined = new Set(library.map((s) => s.skill_id));
   const finished = new Set(completed.map((s) => s.skill_id));
   const sorted = [...skills].sort(
     (a, b) => Number(joined.has(a.id)) - Number(joined.has(b.id)),
   );
+  const visible = sorted.filter((s) => {
+    const matchesFilter = filter === "all" ||
+      (filter === "learning" ? joined.has(s.id) : filter === "completed" ? finished.has(s.id) : !joined.has(s.id) && !finished.has(s.id));
+    const text = [s.name, skillMeta[s.id]?.name, searchTerms[s.id]].join(" ").toLowerCase();
+    return matchesFilter && keywords.every((keyword) => text.includes(keyword));
+  });
   return (
     <div className="page plaza-page" data-page="skills">
+      <form className="skill-search" role="search" aria-label="技能搜索" onSubmit={(event) => event.preventDefault()}>
+        <Search size={24} aria-hidden="true" />
+        <input
+          type="search"
+          aria-label="搜索技能"
+          placeholder="搜索技能，如养花、书法"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          enterKeyHint="search"
+          autoComplete="off"
+        />
+        {query && <button type="button" aria-label="清空搜索" onClick={() => setQuery("")}><X size={24} /></button>}
+      </form>
       <div className="plaza-filters" aria-label="筛选技能">
         {[
           ["all", "全部 " + skills.length],
@@ -143,13 +171,7 @@ export function SkillsPage() {
         ))}
       </div>
       <section className="plaza-grid">
-        {sorted
-          .filter(
-            (s) =>
-              filter === "all" ||
-              (filter === "learning" ? joined.has(s.id) : filter === "completed" ? finished.has(s.id) : !joined.has(s.id) && !finished.has(s.id)),
-          )
-          .map((s) => (
+        {visible.map((s) => (
             <Link
               className="plaza-skill"
               to={"/skills/" + s.id + "?tab=tutorial"}
@@ -180,6 +202,7 @@ export function SkillsPage() {
             </Link>
           ))}
       </section>
+      {!loading && !error && !visible.length && <p className="plaza-empty" role="status">{keywords.length ? "没有找到相关技能" : "暂无技能"}</p>}
       {loading && <p role="status">正在加载…</p>}
       {error && <p role="alert">{error}</p>}
     </div>
@@ -515,7 +538,7 @@ export function RecommendationPage() {
     navigate("/");
   }
   return (
-    <div className="recommendation-only">
+    <div className="recommendation-only" data-work-id={work?.id}>
       <Link className="recommend-back" to="/" aria-label="返回首页">
         <ArrowLeft size={26} />
       </Link>

@@ -1,6 +1,7 @@
 {
   "version": "1.1.0",
   "intent_tools": {
+    "REMOVE_SKILL": ["library.remove"],
     "ADD_SKILL": [
       "library.add"
     ],

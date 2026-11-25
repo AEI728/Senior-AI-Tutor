@@ -17,7 +17,7 @@ test.beforeEach(async ({ page }) => {
   });
 });
 
-test("陪练页面点击助手仍执行页面操作，第二次点击提交录音而非丢弃", async ({ page }) => {
+test("陪练页面按住助手仍执行页面操作，松开提交录音", async ({ page }) => {
   let agents = 0, coaches = 0, wavHasSignal = false;
   await page.route("**/api/v1/audio/transcriptions", (route) => {
     const data = route.request().postDataBuffer()!, start = data.indexOf(Buffer.from("RIFF"));
@@ -31,13 +31,14 @@ test("陪练页面点击助手仍执行页面操作，第二次点击提交录�
   });
   await page.goto("/practice?mode=voice");
   const mic = page.getByRole("button", { name: "小伴语音助手" });
-  await mic.click();
+  await mic.hover();
+  await page.mouse.down();
   const capture = page.locator('.voice-input[data-owner="assistant"]');
   await expect.poll(() => capture.getAttribute("data-peak").then(Number)).toBeGreaterThan(0.001);
   await expect(page.getByRole("button", { name: "开始语音陪练", exact: true })).toBeVisible();
   await expect(page.locator('.voice-input[data-owner="coach"] button.recording')).toHaveCount(0);
   const recognized = page.waitForResponse(r => r.url().endsWith("/audio/transcriptions"));
-  await mic.click();
+  await page.mouse.up();
   expect((await recognized).status()).toBe(200);
   await expect(page).toHaveURL(/\/skills$/);
   expect(wavHasSignal).toBeTruthy();
@@ -58,10 +59,11 @@ test("语音进入陪练只导航，不自动打开摄像头或陪练录音", as
   await page.route("**/api/v1/audio/transcriptions", route => route.fulfill({ json: { text: "打开陪练" } }));
   await page.goto("/");
   const mic = page.getByRole("button", { name: "小伴语音助手" });
-  await mic.click();
+  await mic.hover();
+  await page.mouse.down();
   const capture = page.locator('.voice-input[data-owner="assistant"]');
   await expect.poll(() => capture.getAttribute("data-peak").then(Number)).toBeGreaterThan(0.001);
-  await mic.click();
+  await page.mouse.up();
   await expect(page).toHaveURL(/\/practice$/);
   await expect(page.getByRole("button", { name: "开始视频陪练", exact: true })).toBeVisible();
   expect(await page.evaluate(() => (window as any).mediaRequests.some((c: MediaStreamConstraints) => c.video))).toBe(false);
@@ -107,11 +109,13 @@ test("切换到助手会结束陪练收音并丢弃迟到的陪练回复", async
   await expect.poll(() => page.locator('.voice-input[data-owner="coach"]').getAttribute("data-peak").then(Number)).toBeGreaterThan(0.001);
   await expect(page.locator(".voice-practice").getByRole("button", { name: "说完了", exact: true, includeHidden: true })).toHaveCount(0);
   await expect.poll(() => requested).toBeTruthy();
-  await page.getByRole("button", { name: "小伴语音助手" }).click();
+  await page.getByRole("button", { name: "小伴语音助手" }).hover();
+  await page.mouse.down();
   await expect(page.getByRole("button", { name: "开始语音陪练", exact: true })).toBeVisible();
   await expect(page.locator('.voice-input[data-owner="coach"] button.recording')).toHaveCount(0);
   release();
   await expect(page.locator('.voice-input[data-owner="assistant"] button.recording')).toHaveCount(1);
+  await page.mouse.up();
   expect(ttsIds).not.toContain("late-coach");
   expect(await page.evaluate(() => (window as any).spokenReplies || [])).not.toContain("迟到的陪练回复");
 });
@@ -146,11 +150,12 @@ for (const engine of ["worklet", "compatible"]) {
     });
     await page.goto("/");
     const mic = page.getByRole("button", { name: "小伴语音助手" });
-    await mic.click();
+    await mic.hover();
+  await page.mouse.down();
     const capture = page.locator('.voice-input[data-owner="assistant"]');
     await expect(capture).toHaveAttribute("data-engine", engine);
     await expect.poll(() => capture.getAttribute("data-peak").then(Number)).toBeGreaterThan(0.01);
-    await mic.click();
+    await page.mouse.up();
     await expect.poll(() => signal).toBeTruthy();
     await expect(page).toHaveURL(/\/skills$/);
   });
@@ -178,13 +183,14 @@ test("浏览器返回网易虚拟输入时自动重新连接 Realtek 实体麦�
   await page.route("**/api/v1/audio/transcriptions", route => route.fulfill({ json: { text: "打开技能广场" } }));
   await page.goto("/");
   const mic = page.getByRole("button", { name: "小伴语音助手" });
-  await mic.click();
+  await mic.hover();
+  await page.mouse.down();
   const capture = page.locator('.voice-input[data-owner="assistant"]');
   await expect.poll(() => capture.getAttribute("data-peak").then(Number)).toBeGreaterThan(0.001);
   expect(await page.evaluate(() => (window as any).micRequests[1].audio.deviceId.exact)).toBe("realtek-device");
   expect(await page.evaluate(() => (window as any).micStreams[0].getTracks().every((t: MediaStreamTrack) => t.readyState === "ended"))).toBeTruthy();
   const report = await page.evaluate(() => JSON.parse(sessionStorage.getItem("xiaoban-audio-report-assistant") || "{}"));
   expect(report.device).toContain("Realtek"); expect(report.avoidedDevice).toContain("网易");
-  await mic.click();
+  await page.mouse.up();
   await expect(page).toHaveURL(/\/skills$/);
 });

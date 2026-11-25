@@ -124,7 +124,7 @@ export function selectPcmChannel(channels: Float32Array[]): Float32Array {
   }
   return selected;
 }
-export type VoiceControl = { toggle: () => void; submit: () => void; cancel: () => void };
+export type VoiceControl = { start: () => void; toggle: () => void; submit: () => void; cancel: () => void };
 function within<T>(promise: Promise<T>, ms: number, code: string): Promise<T> {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => reject(new Error(code)), ms);
@@ -150,6 +150,7 @@ export function VoiceInput({
   control,
   compact = false,
   onActiveChange,
+  holdToTalk = false,
 }: {
   owner?: AudioOwner;
   onText: (s: string) => void;
@@ -160,6 +161,7 @@ export function VoiceInput({
   control?: MutableRefObject<VoiceControl | null>;
   compact?: boolean;
   onActiveChange?: (active: boolean) => void;
+  holdToTalk?: boolean;
 }) {
   const [active, setActive] = useState(false),
     [recording, setRecording] = useState(false),
@@ -362,7 +364,7 @@ export function VoiceInput({
           void finish(send);
         };
         setRecording(true);
-        setStatus("正在听，停顿后自动发送");
+        setStatus(holdToTalk ? "正在听，松开发送" : "正在听，停顿后自动发送");
         watchdog = setInterval(() => {
           const now = Date.now();
           if (now - lastPacket > 3500) {
@@ -373,9 +375,9 @@ export function VoiceInput({
               "没有收到麦克风声音，请检查输入设备后再试。",
             );
           } else if (
-            (heard && now - lastVoice > (owner === "coach" ? 1800 : 1200)) ||
+            (!holdToTalk && heard && now - lastVoice > (owner === "coach" ? 1800 : 1200)) ||
             now - started > 19000 ||
-            (!heard && now - started > 10000)
+            (!holdToTalk && !heard && now - started > 10000)
           )
             void finish(true);
         }, 150);
@@ -433,13 +435,17 @@ export function VoiceInput({
       stop.current = null;
       setRecording(false);
     };
-  }, [active, busy, uploading, owner]);
+  }, [active, busy, uploading, owner, holdToTalk]);
   function toggle() {
     if (active) {
       if (recording && stop.current) { endAfterSubmit.current = true; stop.current(true); }
       else stopAudio(true, owner);
       return;
     }
+    start();
+  }
+  function start() {
+    if (active || uploading) return;
     if (!enabled) {
       callbacks.current.onError("语音服务未启用，请检查后端配置并刷新页面。");
       return;
@@ -447,7 +453,7 @@ export function VoiceInput({
     try {
       if (busy) stopAudio(true, owner);
       claimAudio(owner);
-      endAfterSubmit.current = false;
+      endAfterSubmit.current = holdToTalk;
       window.dispatchEvent(new CustomEvent("xiaoban-voice-start", { detail: { owner } }));
       // Resume inside the click gesture, before awaiting microphone permission.
       const audio = new AudioContext();
@@ -464,7 +470,16 @@ export function VoiceInput({
       );
     }
   }
-  if (control) control.current = { toggle, submit: () => stop.current?.(true), cancel: () => stopAudio(true, owner) };
+  if (control) control.current = {
+    start, toggle,
+    submit: () => {
+      if (busy || uploading) return;
+      endAfterSubmit.current = true;
+      if (stop.current) stop.current(true);
+      else cancel(); // Release during permission/setup must never start a late recording.
+    },
+    cancel: () => stopAudio(true, owner),
+  };
   return (
     <div ref={captureElement} data-owner={owner} className={"voice-input " + (compact ? "compact-capture" : "")}>
       <button

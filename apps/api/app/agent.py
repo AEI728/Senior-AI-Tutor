@@ -1,6 +1,7 @@
 import hashlib
 import json
 import time
+import re
 from pathlib import Path
 from openai import OpenAI
 from .config import settings
@@ -11,9 +12,39 @@ from .skill_runtime import compose_prompt, response_text
 
 PROMPTS = Path(__file__).parent / "prompts"
 
+SKILL_ALIASES = {
+    "home-gardening": ("园艺", "养花", "盆栽"),
+    "calligraphy": ("书法", "写字", "练字"),
+    "photography": ("摄影", "拍照"),
+    "music": ("乐器", "节奏", "音乐"),
+}
+
+
+def learning_rule(message, context, pending=None):
+    """Reliable negative commands and deictic references, before any model writes."""
+    targets = [sid for sid, aliases in SKILL_ALIASES.items() if any(a in message for a in aliases)]
+    deictic = any(w in message for w in ("这个", "这门", "这项", "这种", "这节"))
+    negative = bool(re.search(r"(?:不想|不再|不要|不打算).{0,4}[学练]|不学|移除|退出学习|取消学习|停止学习|删掉|删除", message))
+    positive = any(w in message for w in ("想学", "要学", "加入学习"))
+    if re.search(r"不(?:要|想|用).{0,3}(?:移除|删除|删掉)", message):
+        return Plan(intent="UNKNOWN", skill_id=None, course_id=None)
+    if len(targets) > 1 and (negative or positive):
+        return Plan(intent="UNKNOWN", skill_id=None, course_id=None)
+    target = targets[0] if targets else context.focused_skill_id if deictic else None
+    if negative and (targets or deictic or any(w in message for w in ("学习", "不学", "想学", "技能", "课程"))) and not any(w in message for w in ("支付", "转账", "学习数据", "全部数据")):
+        return Plan.model_validate({"intent": "REMOVE_SKILL", "skill_id": target, "course_id": None})
+    if positive and deictic and not any(w in message for w in ("不", "别", "打开")):
+        return Plan.model_validate({"intent": "ADD_SKILL" if target else "UNKNOWN", "skill_id": target, "course_id": None})
+    if pending and pending.get("intent") == "REMOVE_SKILL" and len(targets) == 1 and len(message) < 12 and not positive:
+        return Plan.model_validate({"intent": "REMOVE_SKILL", "skill_id": targets[0], "course_id": None})
+    return None
+
 
 def mock_plan(message, context):
     m = message.strip()
+    ruled = learning_rule(m, context)
+    if ruled is not None:
+        return ruled
     if any(x in m for x in ("认字", "支付", "转账")):
         return Plan(intent="UNAVAILABLE", skill_id=None, course_id=None)
     skill = next(
@@ -72,7 +103,7 @@ def instructions(role):
     return compose_prompt(stage, extra=(PROMPTS / f"{role}.md").read_text("utf-8"))
 
 
-def openai_plan(message, context, catalog=None, pending=None, courses=None):
+def openai_plan(message, context, catalog=None, pending=None, courses=None, page_content=None):
     schema = Plan.model_json_schema()
     result = client().responses.create(
         model=settings().openai_model,
@@ -86,6 +117,7 @@ def openai_plan(message, context, catalog=None, pending=None, courses=None):
                 "available_catalog": catalog or [{"id": "home-gardening", "name": "家庭园艺"}],
                 "pending_clarification": pending or {},
                 "available_courses": courses or [],
+                "page_content_untrusted": page_content,
             },
             ensure_ascii=False,
         ),
@@ -107,7 +139,7 @@ def openai_plan(message, context, catalog=None, pending=None, courses=None):
     return Plan.model_validate_json(calls[0].arguments), result.id
 
 
-def model_plan(message, context, catalog, pending, courses=None):
+def model_plan(message, context, catalog, pending, courses=None, page_content=None):
     if settings().llm_provider == "deepseek":
         return structured(
             Plan,
@@ -118,9 +150,10 @@ def model_plan(message, context, catalog, pending, courses=None):
                 "available_catalog": catalog,
                 "pending_clarification": pending,
                 "available_courses": courses or [],
+                "page_content_untrusted": page_content,
             },
         )
-    return openai_plan(message, context, catalog, pending, courses)
+    return openai_plan(message, context, catalog, pending, courses, page_content)
 
 
 def tutor_answer(message, course, step):

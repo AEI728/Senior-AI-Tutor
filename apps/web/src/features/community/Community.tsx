@@ -286,7 +286,7 @@ export function Community({
       ) : (
         <section className="feed-list" ref={feedRef}>
           {visible.map((w) => (
-            <article className="feed-card" key={w.id}>
+            <article className="feed-card" key={w.id} data-work-id={w.id}>
               {w.video_available ? (
                 <WorkAsset id={w.id} kind="video" />
               ) : w.image_available ? (
@@ -340,6 +340,7 @@ export function Community({
       {selected && (
         <div
           className="work-fullscreen"
+          data-work-id={selected.id}
           role="dialog"
           aria-modal="true"
           aria-label="查看作品"

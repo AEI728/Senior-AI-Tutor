@@ -22,7 +22,10 @@ test("真实ASR模型数据库导航和TTS（自制语音模拟麦克风）", as
     if (r.url().endsWith("/audio/speech")) audioResponses.push(r.status());
   });
   await page.goto("/practice?mode=voice");
-  await page.getByRole("button", { name: "小伴语音助手" }).click();
+  await page.getByRole("button", { name: "小伴语音助手" }).hover();
+  await page.mouse.down();
+  await expect.poll(() => page.locator('.voice-input[data-owner="assistant"]').getAttribute("data-samples").then(Number)).toBeGreaterThan(200000);
+  await page.mouse.up();
   await expect(page.getByRole("dialog", { name: "小伴操作助手" })).toHaveCount(
     0,
   );
@@ -33,10 +36,7 @@ test("真实ASR模型数据库导航和TTS（自制语音模拟麦克风）", as
   await expect
     .poll(() => audioResponses.includes(200), { timeout: 45000 })
     .toBeTruthy();
-  await expect(page.locator('.voice-input[data-owner="assistant"] .voice-status')).toContainText("正在听", {
-    timeout: 60000,
-  });
-  await page.getByRole("button", { name: "小伴语音助手" }).click();
+  await expect(page.getByRole("button", { name: "小伴语音助手" })).toBeEnabled();
   await page.screenshot({
     path: "../../artifacts/ui/real-voice-navigation.png",
     fullPage: true,

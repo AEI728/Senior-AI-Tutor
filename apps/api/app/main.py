@@ -49,13 +49,13 @@ from .schemas import (
     Telemetry,
     CourseDetail,
 )
-from .agent import mock_plan, model_plan, tutor_answer, request_hash, client, Budget, companion_answer
+from .agent import mock_plan, model_plan, tutor_answer, request_hash, client, Budget, companion_answer, learning_rule
 from .providers import ProviderError, audio_request, structured, normalize_wav
 from .schemas import Plan, TutorDecision
 from .skill_runtime import (
     manifest, mark_skill, template, validate_plan, course_candidates, recommend_courses,
     confirmed_recovery, recover, correction_turn, undo_operation, undo_addition,
-    cancel_pending, partial_text, compose_prompt, require_tool,
+    cancel_pending, partial_text, compose_prompt, require_tool, resolve_page_context,
 )
 
 cfg = settings()
@@ -323,6 +323,10 @@ def join(skill_id: str, user=Depends(current_user), db=Depends(database)):
 
 @app.delete("/api/v1/library/{skill_id}")
 def remove(skill_id: str, user=Depends(current_user), db=Depends(database)):
+    return remove_skill(db, user, skill_id)
+
+
+def remove_skill(db, user, skill_id):
     r = db.execute(delete(Library).where(Library.user_id == user.id, Library.skill_id == skill_id))
     return {"skill_id": skill_id, "status": "removed" if r.rowcount else "not_joined"}
 
@@ -669,21 +673,23 @@ def agent_turn(body: TurnInput, user=Depends(current_user), db=Depends(database)
             )
             available = [{"id": s.id, "name": s.name} for s in db.scalars(select(Skill))]
             actual_courses = course_candidates(db)
+            context, page_content = resolve_page_context(db, user, body.ui_context)
             corrected = correction_turn(db, user, turn, body.message, pending)
             if corrected:
                 return corrected
-            plan = confirmed_recovery(body.message, pending, available)
+            plan = learning_rule(body.message, context, pending) or confirmed_recovery(body.message, pending, available)
             if plan is not None:
                 pass
             elif body.message.strip() in ("停", "停止", "取消", "算了", "不用了"):
                 plan = Plan(intent="STOP", skill_id=None, course_id=None)
             elif cfg.llm_provider == "mock":
-                plan = mock_plan(body.message, body.ui_context)
+                plan = mock_plan(body.message, context)
             else:
                 reserve_model(db, user, turn)
                 plan, response_id = model_plan(
-                    body.message, body.ui_context, available, pending,
+                    body.message, context, available, pending,
                     [{k: c.get(k) for k in ("id", "skill_id", "title")} for c in actual_courses],
+                    page_content,
                 )
                 op = db.scalar(
                     select(Operation).where(Operation.turn_id == turn.id, Operation.tool_name == "model.call")
@@ -695,7 +701,8 @@ def agent_turn(body: TurnInput, user=Depends(current_user), db=Depends(database)
                     plan = Plan(intent="ADD_SKILL", skill_id=plan.skill_id, course_id=None)
             mark_skill(turn, "operation-execution")
             validate_plan(plan, available, actual_courses)
-            if plan.intent in ("ADD_SKILL", "ADD_SKILL_AND_OPEN_LESSON") and plan.skill_id is None:
+            requested_intent = plan.intent
+            if plan.intent in ("ADD_SKILL", "ADD_SKILL_AND_OPEN_LESSON", "REMOVE_SKILL") and plan.skill_id is None:
                 plan = Plan(intent="UNKNOWN", skill_id=None, course_id=None)
             corrected = correction_turn(db, user, turn, body.message, pending, plan.skill_id)
             if corrected:
@@ -724,6 +731,16 @@ def agent_turn(body: TurnInput, user=Depends(current_user), db=Depends(database)
                 )
                 name = db.get(Skill, plan.skill_id).name
                 reply = template("added" if addition["status"] == "added" else "already_joined", name=name)
+            elif intent == "REMOVE_SKILL":
+                budget.check("library.remove")
+                require_tool(intent, "library.remove")
+                removal = remove_skill(db, user, plan.skill_id)
+                completed.append({"tool": "library.remove", "result": removal["status"], "skill_id": plan.skill_id})
+                db.add(Operation(
+                    turn_id=turn.id, user_id=user.id, tool_name="library.remove",
+                    idempotency_key=turn.id + ":remove", state="SUCCEEDED", result=removal,
+                ))
+                reply = template("removed" if removal["status"] == "removed" else "not_joined", name=db.get(Skill, plan.skill_id).name)
             elif intent == "CANCEL_ACTION":
                 mark_skill(turn, "failure-recovery")
                 operation = undo_operation(db, user)
@@ -765,7 +782,7 @@ def agent_turn(body: TurnInput, user=Depends(current_user), db=Depends(database)
                 and not pending
                 and not any(
                     word in body.message
-                    for word in ("加入", "打开", "想学", "返回", "课程", "技能", "页面", "陪练")
+                    for word in ("加入", "打开", "想学", "返回", "课程", "技能", "页面", "陪练", "移除", "删除", "不学", "学习", "这个")
                 ))
             ):
                 budget.check("companion.chat")
@@ -889,13 +906,18 @@ def agent_turn(body: TurnInput, user=Depends(current_user), db=Depends(database)
             )
             if intent == "UNKNOWN":
                 mark_skill(turn, "failure-recovery")
+                removing = requested_intent == "REMOVE_SKILL" or pending.get("intent") == "REMOVE_SKILL"
+                joined_ids = set(db.scalars(select(Library.skill_id).where(Library.user_id == user.id))) if removing else set()
                 recovery = recover(pending.get("attempts", 0), [
-                    {"label": s["name"], "message": "我想学" + s["name"]} for s in available
+                    {"label": s["name"], "message": ("不再学习" if removing else "我想学") + s["name"]}
+                    for s in available if not removing or s["id"] in joined_ids
                 ])
+                if removing and recovery["strategy"] == "clarify":
+                    recovery["speech_text"] = "您想移除哪项正在学习的技能？"
                 result["skill_trace"] = turn.response["skill_trace"]
                 result["recovery"] = recovery
                 result["pending_clarification"] = {
-                    "intent": pending.get("intent")
+                    "intent": (requested_intent if requested_intent in ("ADD_SKILL", "REMOVE_SKILL") else None) or pending.get("intent")
                     or ("ADD_SKILL" if any(x in body.message for x in ("想学", "加入")) else "UNKNOWN"),
                     "attempts": recovery["attempts"],
                 }

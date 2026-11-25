@@ -12,6 +12,8 @@
     "我会永远陪着您"
   ],
   "templates": {
+    "removed": "已从正在学习中移除{name}，学习进度已保留。",
+    "not_joined": "{name}不在您的正在学习中。",
     "added": "{name}已加入技能库。",
     "already_joined": "{name}已经在您的技能库中了。",
     "opening": "正在打开，请稍候。",

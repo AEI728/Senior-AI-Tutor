@@ -44,7 +44,10 @@ test("麦克风被拒绝会播报原因且不弹文字气泡", async ({ page }) 
     await route.fulfill({ response, json: { ...(await response.json()), audio_provider: "test" } });
   });
   await page.goto("/");
-  await page.getByRole("button", { name: "小伴语音助手" }).click();
+  await page.getByRole("button", { name: "小伴语音助手" }).hover();
+  await page.mouse.down();
+  await expect(page.getByRole("button", { name: "小伴语音助手" })).toHaveAttribute("title", /未获授权/);
+  await page.mouse.up();
   await expect.poll(() => page.evaluate(() => (window as any).spokenError || "")).toContain("未获授权");
   await expect(page.getByRole("button", { name: "小伴语音助手" })).toHaveAttribute("title", /未获授权/);
   await expect(page.locator(".direct-conversation p")).toHaveCount(0);

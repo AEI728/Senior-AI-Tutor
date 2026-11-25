@@ -487,6 +487,49 @@
 .reference-ui .plaza-page {
   padding-bottom: 120px;
 }
+.reference-ui .skill-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 60px;
+  margin-bottom: 16px;
+  padding: 4px 8px 4px 16px;
+  background: #fffdf8;
+  border: 1px solid #a5b6a0;
+  border-radius: 14px;
+  color: #52724f;
+}
+.reference-ui .skill-search:focus-within {
+  outline: 3px solid #52724f;
+  outline-offset: 2px;
+}
+.reference-ui .skill-search > svg { flex-shrink: 0; }
+.reference-ui .skill-search input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+  padding: 8px 0;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+  color: #292720;
+  font-size: calc(18px * var(--font-scale, 1));
+}
+.reference-ui .skill-search input::placeholder { color: #6d7267; }
+.reference-ui .skill-search input::-webkit-search-cancel-button { display: none; }
+.reference-ui .skill-search button {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  min-height: 48px;
+  padding: 0;
+  color: #52724f;
+  background: transparent;
+}
 .reference-ui .plaza-header {
   min-height: 92px;
   display: flex;
@@ -3540,6 +3583,11 @@
 }
 .reference-ui .camera-status { top: 18px; }
 .reference-ui .bottom-mic.voice-failed { background: #9d2f26; }
+.reference-ui .bottom-mic.waiting { cursor: wait; opacity: 1; }
+.reference-ui .bottom-mic { touch-action: none; user-select: none; -webkit-touch-callout: none; }
+.reference-ui .bottom-mic:disabled { opacity: 1; }
+.reference-ui .mic-waiting-spinner { animation: mic-waiting-spin 1s linear infinite; }
+@keyframes mic-waiting-spin { to { transform: rotate(360deg); } }
 .reference-ui .plaza-filters { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .reference-ui .camera-practice.is-idle,
 .reference-ui .voice-practice { background: #f5f4ec; }

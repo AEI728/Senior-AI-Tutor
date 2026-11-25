@@ -4,6 +4,7 @@
     "intent": {
       "enum": [
         "ADD_SKILL",
+        "REMOVE_SKILL",
         "DISCOVER_SKILL",
         "OPEN_LESSON",
         "ADD_SKILL_AND_OPEN_LESSON",

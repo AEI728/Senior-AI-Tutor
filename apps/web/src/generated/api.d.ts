@@ -853,6 +853,8 @@ export interface components {
             course_id?: string | null;
             /** Focused Skill Id */
             focused_skill_id?: string | null;
+            /** Focused Work Id */
+            focused_work_id?: string | null;
             /** Last Visible Action Id */
             last_visible_action_id?: string | null;
             /**

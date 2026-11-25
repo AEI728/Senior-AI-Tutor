@@ -18,6 +18,7 @@ metadata:
 技能加入返回真实 added/already_joined；导航生成有期限的 Action，只有当前用户的 applied 回执后才能宣布打开。失败保留已成功的步骤。
 
 ## 校验与撤销
+- REMOVE_SKILL 使用 library.remove，仅移除当前用户的正在学习条目，保留进度、作品及已完成记录；不在学习库时如实反馈，不等同于清空个人学习数据。
 - ID 必须在可用目录中，course_id 必须属于对应技能；课程访问用服务端现有审核/权限检查。
 - 先加入后开课按顺序执行；加入失败不创建后续导航。页面失败时按实际完成步骤反馈对应技能名称。
 - 撤销通过当前用户最近 library.add Operation 绑定，相当于服务端撤销凭证；不声称接口存在 undo_token 或 state_version 字段。

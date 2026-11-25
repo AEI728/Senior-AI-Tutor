@@ -12,7 +12,10 @@ test("拒绝语音权限也不显示气泡或弹窗", async ({ page }) => {
       Promise.reject(new DOMException("denied", "NotAllowedError"));
   });
   await page.goto("/");
-  await page.getByRole("button", { name: "小伴语音助手" }).click();
+  await page.getByRole("button", { name: "小伴语音助手" }).hover();
+  await page.mouse.down();
+  await expect(page.getByRole("button", { name: "小伴语音助手" })).toHaveAttribute("title", /未获授权/);
+  await page.mouse.up();
   await expect(
     page.getByRole("button", { name: "小伴语音助手" }),
   ).toHaveAttribute("aria-pressed", "false");

@@ -1,26 +1,32 @@
 import { useEffect, useRef, useState, type MutableRefObject } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Mic } from "lucide-react";
+import { LoaderCircle, Mic } from "lucide-react";
 import { api, newId, friendly } from "../../lib/api";
 import { VoiceInput, speak, stopAudio, type VoiceControl } from "../voice/VoiceInput";
 import { audioReport } from "../voice/diagnostics";
 import { sayLocal } from "../voice/media";
+import { readPageContext } from "./pageContext";
 
-function AssistantConversation({ user, voiceControl, onVoiceActive }: {
+function AssistantConversation({ user, voiceControl, onVoiceActive, onWaitingChange }: {
   user: any;
   voiceControl?: MutableRefObject<VoiceControl | null>;
   onVoiceActive?: (active: boolean) => void;
+  onWaitingChange?: (waiting: boolean) => void;
 }) {
   const [error, setError] = useState(""),
     [busy, setBusy] = useState(false),
     [rate, setRate] = useState(1),
     [speaking, setSpeaking] = useState(false);
+  useEffect(() => {
+    onWaitingChange?.(busy && !speaking);
+  }, [busy, speaking, onWaitingChange]);
   const location = useLocation(),
     navigate = useNavigate(),
     pendingRequest = useRef<any>(null),
     controller = useRef<AbortController | null>(null),
     alive = useRef(true),
     voiceTurn = useRef(0);
+  const capturedContext = useRef<ReturnType<typeof readPageContext> | null>(null);
   useEffect(() => {
     if (error) {
       stopAudio(true, "assistant");
@@ -30,7 +36,10 @@ function AssistantConversation({ user, voiceControl, onVoiceActive }: {
   }, [error]);
   useEffect(() => {
     const clear = (e: Event) => {
-      if ((e as CustomEvent).detail?.owner === "assistant") setError("");
+      if ((e as CustomEvent).detail?.owner === "assistant") {
+        setError("");
+        capturedContext.current = readPageContext(window.location.pathname);
+      }
     };
     window.addEventListener("xiaoban-voice-start", clear);
     return () => window.removeEventListener("xiaoban-voice-start", clear);
@@ -62,33 +71,15 @@ function AssistantConversation({ user, voiceControl, onVoiceActive }: {
     audioReport("assistant", { phase: "thinking" });
     setError("");
     if (input.includes("慢")) setRate(0.75);
-    const page =
-      location.pathname.startsWith("/lessons")
-          ? "lesson"
-          : location.pathname.includes("skills")
-            ? "skills"
-            : ["/share", "/community"].includes(location.pathname)
-              ? "community"
-              : location.pathname.startsWith("/practice")
-                ? "practice"
-                : "home";
+    const uiContext = capturedContext.current || readPageContext(location.pathname);
     const request =
-      pendingRequest.current?.message === input
+      pendingRequest.current?.message === input && JSON.stringify(pendingRequest.current.ui_context) === JSON.stringify(uiContext)
         ? pendingRequest.current
         : {
             agent_role: "companion",
             client_request_id: newId(),
             message: input,
-            ui_context: {
-              page,
-              focused_skill_id: location.pathname.startsWith("/skills/")
-                ? decodeURIComponent(location.pathname.split("/")[2])
-                : null,
-              course_id:
-                page === "lesson"
-                  ? decodeURIComponent(location.pathname.split("/")[2])
-                  : null,
-            },
+            ui_context: uiContext,
             practice_session_id: null,
           };
     pendingRequest.current = request;
@@ -225,6 +216,7 @@ function AssistantConversation({ user, voiceControl, onVoiceActive }: {
           owner="assistant"
           control={voiceControl}
           compact
+          holdToTalk
           onActiveChange={onVoiceActive}
           enabled={!!user && user.audio_provider !== "mock"}
           busy={busy || speaking}
@@ -237,9 +229,29 @@ function AssistantConversation({ user, voiceControl, onVoiceActive }: {
 
 export function Assistant({ user }: { user: any }) {
   const [active, setActive] = useState(false);
+  const [waiting, setWaiting] = useState(false);
+  const [holding, setHolding] = useState(false);
   const [voiceError, setVoiceError] = useState("");
   const [inputLevel, setInputLevel] = useState(0);
   const control = useRef<VoiceControl | null>(null);
+  const heldPointer = useRef<number | null>(null);
+  const heldKey = useRef<string | null>(null);
+  const cancelHold = () => {
+    if (heldPointer.current === null && heldKey.current === null) return;
+    heldPointer.current = null;
+    heldKey.current = null;
+    setHolding(false);
+    control.current?.cancel();
+  };
+  useEffect(() => {
+    const hidden = () => { if (document.hidden) cancelHold(); };
+    window.addEventListener("blur", cancelHold);
+    document.addEventListener("visibilitychange", hidden);
+    return () => {
+      window.removeEventListener("blur", cancelHold);
+      document.removeEventListener("visibilitychange", hidden);
+    };
+  }, []);
   useEffect(() => {
     const error = (e: Event) => setVoiceError((e as CustomEvent).detail);
     const meter = (e: Event) => {
@@ -256,23 +268,59 @@ export function Assistant({ user }: { user: any }) {
       className={"direct-assistant " + (active ? "is-active" : "")}
     >
       <button
-        className={"bottom-mic " + (active ? "listening" : "") + (voiceError ? " voice-failed" : "")}
-        title={voiceError || "点击开始对话"}
-        style={{ boxShadow: active ? `0 0 0 ${3 + inputLevel / 10}px #52724f45` : undefined }}
+        className={"bottom-mic " + (waiting ? "waiting" : holding ? "listening" : "")}
+        title={waiting ? "小伴正在思考" : voiceError || "按住说话，松开发送"}
+        style={{ boxShadow: holding && !waiting ? `0 0 0 ${3 + inputLevel / 10}px #52724f45` : undefined }}
         aria-label="小伴语音助手"
+        aria-busy={waiting}
+        disabled={waiting || (active && !holding)}
         aria-description={voiceError || undefined}
-        aria-pressed={active}
-        onClick={() => {
+        aria-pressed={holding}
+        onPointerDown={(event) => {
+          if (event.button !== 0 || !event.isPrimary || heldPointer.current !== null || heldKey.current !== null) return;
+          event.preventDefault();
+          event.currentTarget.focus();
+          event.currentTarget.setPointerCapture(event.pointerId);
+          heldPointer.current = event.pointerId;
           setVoiceError("");
-          control.current?.toggle();
+          setHolding(true);
+          control.current?.start();
         }}
+        onPointerUp={(event) => {
+          if (heldPointer.current !== event.pointerId) return;
+          heldPointer.current = null;
+          setHolding(false);
+          control.current?.submit();
+          if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+        }}
+        onPointerCancel={cancelHold}
+        onLostPointerCapture={cancelHold}
+        onContextMenu={(event) => event.preventDefault()}
+        onKeyDown={(event) => {
+          if (![" ", "Enter"].includes(event.key)) return;
+          event.preventDefault();
+          if (event.repeat || heldKey.current !== null || heldPointer.current !== null) return;
+          heldKey.current = event.key;
+          setVoiceError("");
+          setHolding(true);
+          control.current?.start();
+        }}
+        onKeyUp={(event) => {
+          if (heldKey.current !== event.key) return;
+          event.preventDefault();
+          heldKey.current = null;
+          setHolding(false);
+          control.current?.submit();
+        }}
+        onBlur={cancelHold}
       >
-        <Mic size={27} />
+        {waiting ? <LoaderCircle className="mic-waiting-spinner" size={27} aria-hidden="true" /> : <Mic size={27} />}
       </button>
       <AssistantConversation
         user={user}
         voiceControl={control}
         onVoiceActive={setActive}
+        onWaitingChange={setWaiting}
       />
     </aside>
   );
